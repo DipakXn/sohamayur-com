@@ -1,0 +1,20 @@
+<script>
+
+  // Check if the current page is the home page
+if (window.location.pathname === '/') {
+  // Attach the event listener to a specific static parent element
+  document.addEventListener('click', (event) => {
+    // Use event delegation to check if the click is on a relevant label
+    if (event.target.closest('.product-form__input--pill label')) {
+      // Call bucksCC.reConvert with a 2-second delay
+      setTimeout(() => {
+        if (bucksCC?.reConvert) {
+          bucksCC.reConvert();
+        }
+      }, 2000);
+    }
+  });
+}
+
+  
+</script>

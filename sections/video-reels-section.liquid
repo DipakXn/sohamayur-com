@@ -1,0 +1,481 @@
+{% comment %}
+  Video Reels – Carousel (Swiper)
+  Source: Collection (selected in section settings)
+  Each product should have a Product metafield:
+    Namespace/Key: custom.reel_video
+    Type: File (video)
+
+  Notes:
+  - Autoplays on hover (desktop). On touch devices, tap the video to play/pause.
+  - Uses CDN Swiper v10 (loaded once per page via id guards).
+{% endcomment %}
+
+<section class="video-reels-section" id="video-reels-{{ section.id }}">
+  {%- assign coll = section.settings.collection -%}
+  {%- if coll != blank and coll.products_count > 0 -%}
+
+  {%- comment -%} Load Swiper CSS/JS (guard so we only add once) {%- endcomment -%}
+  <style id="reels-swiper-css" {% unless request.design_mode %}media="all"{% endunless %}>
+  @import url('https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css');
+  </style>
+  <script id="reels-swiper-js" defer src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+<div class="reels-head relative mb-4 text-center">
+  {% if section.settings.title != blank %}
+    <h2 class="reels-title text-2xl font-semibold text-center w-full">{{ section.settings.title }}</h2>
+  {% endif %}
+  
+ <div class="reels-nav flex gap-2 absolute right-0 top-0 translate-y-[-50%] mt-8 mr-2 z-50">
+    <button class="reels-prev px-3 py-2 rounded bg-gray-100" aria-label="Prev">‹</button>
+    <button class="reels-next px-3 py-2 rounded bg-gray-100" aria-label="Next">›</button>
+  </div>
+</div>
+
+
+<div class="reels-container-limit">
+  <div class="swiper" id="reels-swiper-{{ section.id }}">
+    <div class="swiper-wrapper" data-src="{{ vid | file_url }}"
+data-poster="{{ product.featured_image | image_url: width: 800 }}"
+data-title="{{ product.title | escape }}"
+data-url="{{ product.url | escape }}"
+data-price="{{ product.price | money | escape }}"
+data-views="{{ product.metafields.custom.reel_views.value | escape }}"
+data-likes="{{ product.metafields.custom.reel_likes.value | default: 0 | escape }}"
+data-image="{{ product.featured_image | image_url: width: 300 | escape }}">
+      {%- assign shown = 0 -%}
+      {%- for product in coll.products limit: section.settings.max_items -%}
+        {%- assign vid = product.metafields.custom.reel_video -%}
+        {%- if vid != blank -%}
+          <div class="swiper-slide"
+     data-index="{{ forloop.index0 }}"
+     data-section="{{ section.id }}"
+     data-src="{{ vid | file_url }}"
+     data-poster="{{ product.featured_image | image_url: width: 800 }}"
+     data-title="{{ product.title | escape }}"
+     data-url="{{ product.url }}"
+     data-price="{{ product.price | money }}"
+     data-compare-at-price="{{ product.compare_at_price | money }}"
+     data-views="{{ product.metafields.custom.reel_views.value | escape }}"
+     data-likes="{{ product.metafields.custom.reel_likes.value | default: 0 }}"
+     data-image="{{ product.featured_image | image_url: width: 300 }}">
+
+            <article class="reel-card">
+              <div class="reel-media">
+                <video class="reel-video" muted playsinline preload="metadata" poster="">
+                  <source src="{{ vid | file_url }}" type="video/mp4">
+                </video>
+
+                <div class="reel-overlay-bottom">
+  <div class="reel-views-badge">
+    {{ product.metafields.custom.reel_views.value }}
+  </div>
+  <div class="reel-icons">
+    <button class="icon-btn" aria-label="like">
+      <svg width="22" height="22" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"></path>
+      </svg>
+    </button>
+
+    <button class="icon-btn" aria-label="share">
+      <svg width="22" height="22" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <circle cx="18" cy="5" r="3" />
+        <circle cx="6" cy="12" r="3" />
+        <circle cx="18" cy="19" r="3" />
+        <path d="M8.59 13.51l6.83 3.98" />
+        <path d="M15.41 6.51L8.59 10.49" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+              </div>
+
+              <div class="reel-info">
+
+  <div class="reel-top">
+    <img class="reel-thumb" src="{{ product.featured_image | image_url: width: 120 }}" width="" height="" alt="{{ product.title }}">
+
+    <div class="reel-meta">
+      <div class="reel-title line-clamp-1">{{ product.title }}</div>
+      <div class="reel-price">
+        <span class="price">{{ product.price | money }}</span>
+        {%- if product.compare_at_price > product.price -%}
+          <s class="compare">{{ product.compare_at_price | money }}</s>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <a class="reel-btn" href="{{ product.url }}" aria-label="Buy {{ product.title }}">
+    {{ section.settings.button_label }}
+  </a>
+</div>
+
+
+            </article>
+          </div>
+          {%- assign shown = shown | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+  <style>
+
+    #video-reels-{{ section.id }} .reels-container-limit{
+  max-width: 1350px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+#reels-swiper-{{ section.id }} .swiper-wrapper{
+      margin: 10px 0px 10px 0px !important;
+}
+    /* Layout */
+    #video-reels-{{ section.id }} .reels-title{
+  text-align:center;
+  width:100%;
+}
+
+    #video-reels-{{ section.id }} .swiper {
+      overflow: hidden;
+    }
+    #video-reels-{{ section.id }} .swiper-slide {
+      width: auto;
+      padding: 0 {{ section.settings.gap | default: 16 | divided_by: 2 }}px;
+    }
+
+
+
+    /* Card */
+    #video-reels-{{ section.id }} .reel-card{
+      width: {{ section.settings.card_width }}px;
+      display:flex;
+      flex-direction:column;
+      gap:.75rem;
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 8px;
+      border-radius:10px;
+    }
+
+    #video-reels-{{ section.id }} .reel-card:hover{
+      box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 17px;
+      transition: box-shadow .3s ease;
+    }
+
+    /* Media box: vertical 9:16 */
+    #video-reels-{{ section.id }} .reel-media{
+      position:relative;
+      border-radius:10px 10px 0 0;
+      overflow:hidden;
+      box-shadow: 0 6px 22px rgba(0,0,0,.08);
+      background:#000;
+      aspect-ratio: 9 / 16;
+    }
+    #video-reels-{{ section.id }} .reel-video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+  #video-reels-{{ section.id }} .reel-overlay-bottom{
+  position:absolute; bottom:0; left:0; right:0;
+  padding:8px 10px;
+  display:flex; justify-content:space-between; align-items:center;
+  pointer-events:none;
+}
+
+#video-reels-{{ section.id }} .reel-views-badge{
+  background:rgba(0,0,0,.55);
+  padding:4px 10px;
+  border-radius:8px;
+  color:#fff;
+  font-size:13px;
+  font-weight:600;
+  pointer-events:auto;
+}
+
+#video-reels-{{ section.id }} .reel-icons{
+  display:flex;
+  gap:12px;
+  pointer-events:auto;
+}
+
+#video-reels-{{ section.id }} .icon-btn{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:32px;
+  height:32px;
+  background:transparent !important;
+  padding:0;
+  border: none;
+}
+
+#video-reels-{{ section.id }} .icon-btn svg{
+  stroke-width:2.8;
+  width:28px;
+  height:28px;
+}
+
+#video-reels-{{ section.id }} .icon-btn.liked svg{
+  fill:red;
+  stroke:red;
+  transform:scale(1.3);
+  transition:transform .25s ease, fill .15s ease;
+}
+
+
+
+    /* Info */
+   #video-reels-{{ section.id }} .reel-info{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:10px;
+}
+
+#video-reels-{{ section.id }} .reel-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+#video-reels-{{ section.id }} .reel-title{
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+
+#video-reels-{{ section.id }} .reel-thumb{
+  width: 48px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+#video-reels-{{ section.id }} .reel-btn{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-radius:10px;
+  padding:12px 0;
+  background:#471200;
+  color:#fff;
+  font-weight:700;
+  text-decoration:none;
+  margin-top:4px;
+}
+    /* Nav buttons */
+    #video-reels-{{ section.id }} .reels-nav button{
+      display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:34px;
+      border:1px solid #e5e5e5;
+      transition:background .2s;
+    }
+    #video-reels-{{ section.id }} .reels-nav button:hover{ background:#efefef; }
+
+    .reels-nav {
+    position: relative;
+    display: flex;
+    background: none !important;
+    color: #fff;
+    border: 0;
+    left: 89%;
+    gap: 12px;
+    width: 40px;
+    height: 46px;
+    border-radius: 12px;
+    font-size: 28px;
+    padding-bottom: 10px;
+}
+
+    @media (max-width: 767px){
+  #video-reels-{{ section.id }} .swiper-slide {
+    padding:0 !important;
+    flex-shrink: inherit;
+  }
+
+  #video-reels-{{ section.id }} .reel-card{
+    width: calc(100vw - 150px);
+  }
+
+  #video-reels-{{ section.id }} .swiper-slide {
+    margin-left: 5px;
+  }
+   .reels-nav {
+    left: 79%;
+}
+
+}
+    #video-reels-{{ section.id }} .reels-prev, 
+    #video-reels-{{ section.id }} .reels-next{
+     position:relative !important;
+     right:0 !important;
+     left:auto !important;
+}
+
+.compare {
+  font-size: 12px;
+}
+  </style>
+
+  <script>
+(function () {
+  const init = () => {
+
+    /* =======================
+       Initialize Swiper
+    ======================= */
+    const swiper = new Swiper('#reels-swiper-{{ section.id }}', {
+      slidesPerView: 'auto',
+      centeredSlides: false,
+      spaceBetween: {{ section.settings.gap | default: 16 | json }},
+      loop: {{ section.settings.loop | json }},
+      navigation: {
+        nextEl: '#video-reels-{{ section.id }} .reels-next',
+        prevEl: '#video-reels-{{ section.id }} .reels-prev',
+      },
+      breakpoints: {
+        768: {
+          slidesPerView: {{ section.settings.slides_per_view_desktop | default: 3 | json }},
+          centeredSlides: false,
+        }
+      }
+    });
+
+    const sectionEl = document.getElementById('video-reels-{{ section.id }}');
+
+    /* =======================
+       Register reels for modal
+    ======================= */
+    const slidesEl = sectionEl.querySelectorAll('.swiper-slide');
+    window.ReelsRegistry = window.ReelsRegistry || {};
+    window.ReelsRegistry['{{ section.id }}'] = Array.from(slidesEl).map(slide => ({
+      src: slide.dataset.src,
+      poster: slide.dataset.poster,
+      title: slide.dataset.title,
+      url: slide.dataset.url,
+      price: slide.dataset.price,
+      compare_at_price: slide.dataset.compareAtPrice,
+      views: slide.dataset.views,
+      likes: slide.dataset.likes,
+      image: slide.dataset.image
+    }));
+
+    /* =======================
+       Open modal on click
+    ======================= */
+    sectionEl.querySelectorAll('.reel-media').forEach(media => {
+      media.style.cursor = 'pointer';
+      media.addEventListener('click', e => {
+        const slide = e.currentTarget.closest('.swiper-slide');
+        const idx = parseInt(slide?.dataset.index || '0', 10);
+        window.openReelModal?.({ sectionId: '{{ section.id }}', startIndex: idx });
+      });
+    });
+
+    /* =======================
+       Like animation
+    ======================= */
+    sectionEl.querySelectorAll('.icon-btn[aria-label="like"]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        btn.classList.add('liked');
+      });
+    });
+
+    /* =======================
+       Native share
+    ======================= */
+    sectionEl.querySelectorAll('.icon-btn[aria-label="share"]').forEach(btn => {
+      btn.addEventListener('click', async e => {
+        e.stopPropagation();
+        if (navigator.share) {
+          await navigator.share({
+            title: document.title,
+            url: btn.closest('.reel-card').querySelector('.reel-btn').href
+          });
+        } else {
+          alert("Your device does not support direct share.");
+        }
+      });
+    });
+
+    /* =======================
+       Hover-to-play (unlock browser)
+    ======================= */
+    sectionEl.querySelectorAll('.reel-card').forEach(card => {
+      const video = card.querySelector('video');
+
+      card.addEventListener('mouseenter', () => {
+        if (video.paused) {
+          video.play().catch(() => {});
+        }
+      });
+    });
+
+    /* =======================
+       Visibility-based play/pause
+    ======================= */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const video = entry.target.querySelector('video');
+        if (!video) return;
+
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    }, {
+      root: null,        // viewport
+      threshold: 0.5
+    });
+
+    sectionEl.querySelectorAll('.swiper-slide').forEach(slide => {
+      observer.observe(slide);
+    });
+  };
+
+  if (window.Swiper) {
+    init();
+  } else {
+    document.getElementById('reels-swiper-js')?.addEventListener('load', init);
+  }
+})();
+</script>
+
+
+  {%- else -%}
+    <p>Add a collection with products that have the <strong>custom.reel_video</strong> metafield set.</p>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Video Reels – Carousel",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading", "default": "Watch & Shop" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "max_items", "label": "Max products", "min": 4, "max": 48, "step": 1, "default": 12 },
+    { "type": "range", "id": "slides_per_view_desktop", "label": "Slides per view (desktop)", "min": 2, "max": 6, "step": 1, "default": 4 },
+    { "type": "range", "id": "slides_per_view_mobile", "label": "Slides per view (mobile)", "min": 1, "max": 3, "step": 1, "default": 1 },
+    { "type": "range", "id": "gap", "label": "Gap between cards (px)", "min": 8, "max": 32, "step": 1, "default": 16 },
+    { "type": "checkbox", "id": "loop", "label": "Loop slides", "default": false },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Buy Now" },
+    { "type": "range", "id": "card_width", "label": "Card width (desktop px)", "min": 220, "max": 400, "step": 2, "default": 260 },
+    { "type": "range", "id": "card_width_mobile", "label": "Card width (mobile px)", "min": 180, "max": 320, "step": 2, "default": 220 }
+  ],
+  "presets": [
+    { "name": "Video Reels – Carousel" }
+  ]
+}
+{% endschema %}

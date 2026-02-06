@@ -1,0 +1,258 @@
+<style>
+  .keyIngredients .SectionHeader {
+    margin-bottom: 45px;
+    margin-top: 52px;
+  }
+  #section-{{ section.id }} {
+    color: {{ section.settings.text_color }};
+    /* Removed background color */
+  }
+  .Container--normal {
+    max-width: 1270px;
+    margin: auto;
+  }
+  .keyIngredients img {
+    width: 175px !important;
+    height: 175px !important;
+    border-radius: 0% !important;
+    margin: auto !important;
+    margin-bottom: 20px !important;
+    object-fit: contain;
+  }
+  .ayur-head {
+    /* Custom styles for heading */
+    text-align: center;
+  }
+  .IngrSlider {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: space-around;
+  }
+  .item {
+    flex: 0 0 auto;
+    width: 350px;
+    margin: 0 10px;
+    text-align: center;
+  }
+  
+  @media(max-width: 750px) {
+    .keyIngredients {
+      padding-top: 0px !important;
+      padding-bottom: 0px !important;
+    }
+    .IngrSlider {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+    .item {
+      width: 50%; /* Show two items per row */
+      margin: 0 auto;
+      flex: 0 0 100%;
+    }
+    .ayur-head {
+      margin-left: 15px;
+    }
+    .ingredient-btn {
+      margin-left: 15px;
+      margin-right: 5px;
+    }
+  }
+  .panel {
+    display: none;
+    max-height: 0;
+    transition: max-height 0.3s ease-out;
+    overflow: hidden;
+  }
+  .panel.open {
+    display: block;
+    max-height: 2000px; /* Adjust this value as needed */
+  }
+</style>
+
+{% assign product_tag = product.tags %}
+{%- if product_tag != blank -%}  
+{%- if section.settings.subheading != blank or section.settings.heading != blank -%}  
+<section class="Section Section--spacingNormal keyingredients_fullsec" id="section-{{ section.id }}">
+  {% assign product_handle = product.handle %}
+  <div class="Container--normal">
+    <div class="keyIngredients">
+      {%- if section.settings.subheading != blank or section.settings.heading != blank -%}  
+        <header class="SectionHeader">
+          {%- if section.settings.subheading != blank -%}
+            <div class="SectionHeader__SubHeading Heading u-h5 ayur-head">{{ section.settings.subheading }}</div>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="SectionHeader__Heading Heading u-h1 text-left ayur-head">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+        </header>    
+      {%- endif -%}
+      <div class="IngrSlider">
+        <!--/ ONLY print specific page data -->
+        {% for block in section.blocks %}
+          {% assign dyproduct_tag = block.settings.ing_tags %}
+          {% assign dyproduct_tag_2 = block.settings.ing_tags_2 %}
+          {% assign product_tag = product.tags %}
+          {% for tag in product.tags %}
+            {% if tag == dyproduct_tag %}
+              <div class="item text-center">
+                {%- if block.settings.image != blank -%}
+                  <div class="img-border">
+                    <img loading="lazy" src="{{ block.settings.image | img_url: 'master' }}" alt="INGREDIENTS & THEIR NUTRIENTS">
+                  </div>
+                {%- endif -%}
+                <div class="content-container">
+                  {%- if block.settings.title != blank -%}  
+                    <h3 class="titles gs-header" aria-expanded="false">{{ block.settings.title }}</h3> 
+                  {%- endif -%}
+                  {%- if block.settings.ing_description != blank -%} 
+                    <div class="description gs-content" aria-label="false">{{ block.settings.ing_description }}</div> 
+                  {%- endif -%}
+                </div>
+              </div>
+            {% elsif tag == dyproduct_tag_2 %}
+              <div class="item text-center">
+                {%- if block.settings.image_2 != blank -%}
+                  <div class="img-border">
+                    <img loading="lazy" src="{{ block.settings.image_2 | img_url: 'master' }}" alt="INGREDIENTS & THEIR NUTRIENTS">
+                  </div>
+                {%- endif -%}
+                <div class="content-container">
+                  {%- if block.settings.title_2 != blank -%}  
+                    <h3 class="titles gs-header" aria-expanded="false">{{ block.settings.title_2 }}</h3> 
+                  {%- endif -%}
+                  {%- if block.settings.ing_description_2 != blank -%} 
+                    <div class="description gs-content" aria-label="false">{{ block.settings.ing_description_2 }}</div> 
+                  {%- endif -%}
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </div>
+      
+      {%- if product.metafields.custom.all_ingredient != blank -%} 
+        <div class="ingredient-btn text-center" style="margin-top:30px;">
+          <a href="javascript:void(0)" class="toggle-ingredients-btn" style="color: #471200;">Show all ingredients <i class="fa fa-angle-down"></i></a>
+          <div class="panel">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <p>{{ product.metafields.custom.all_ingredient }}</p>    
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      {%- endif -%} 
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Ingredient Section 2",
+  "class": "shopify-section--bordered",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Enter the Sub Heading for the section"
+    },		
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Enter the heading for the section"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#f5f6f6"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#808182"
+    }
+  ],
+  "presets": [{
+    "name": "Ingredient Section 2",
+    "settings": {}
+  }],
+  "max_blocks": 50,
+  "blocks": [
+    {
+      "type": "text_block",
+      "name": "product Management",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Ingredient title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "600px x 600px .jpg recommended"
+        },
+        {
+          "type": "richtext",
+          "id": "ing_description",
+          "label": "Ingredient description"
+        },
+        {
+          "type": "textarea",
+          "id": "ing_tags",
+          "label": "Product Tag",
+          "info": "Enter The exact tag added to the product eg. cucumber"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Ingredient title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image",
+          "info": "600px x 600px .jpg recommended"
+        },
+        {
+          "type": "richtext",
+          "id": "ing_description_2",
+          "label": "Ingredient description"
+        },
+        {
+          "type": "textarea",
+          "id": "ing_tags_2",
+          "label": "Product Tag",
+          "info": "Enter The exact tag added to the product eg. cucumber"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelector(".toggle-ingredients-btn").addEventListener("click", function() {
+    var panel = document.querySelector(".panel");
+    panel.classList.toggle("open");
+    if (panel.classList.contains("open")) {
+      this.innerHTML = 'Hide all ingredients <i class="fa fa-angle-up"></i>';
+    } else {
+      this.innerHTML = 'Show all ingredients <i class="fa fa-angle-down"></i>';
+    }
+  });
+});
+{% endjavascript %}

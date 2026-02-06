@@ -1,0 +1,164 @@
+{% schema %}
+{
+  "name": "Scrolling Banner",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#335f2c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "label": "Scroll Speed (seconds)",
+      "min": 5,
+      "max": 60,
+      "step": 1,
+      "default": 25
+    },
+    {
+      "type": "text",
+      "id": "font_size",
+      "label": "Font Size (e.g. 16px)",
+      "default": "16px"
+    },
+    {
+      "type": "range",
+      "id": "gap_size",
+      "label": "Gap Between Items (in rem)",
+      "min": 1,
+      "max": 10,
+      "step": 0.5,
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "banner_item",
+      "name": "Banner Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "BPA Free"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling Banner",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+<div 
+  class="scrolling-banner"
+  style="
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+  "
+>
+  <div 
+    class="scrolling-content"
+    style="
+      animation: scroll-left {{ section.settings.scroll_speed }}s linear infinite;
+      gap: {{ section.settings.gap_size }}rem;
+    "
+  >
+    {% for block in section.blocks %}
+      <div class="banner-item" style="font-size: {{ section.settings.font_size }};">
+        <span class="banner-icon">
+          <svg style="fill: none" width="20" height="20" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g transform="scale(4.16)">
+              <g clip-path="url(#clip0_598_8027)">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.3125 23.0469C19.5886 23.0469 19.8125 22.823 19.8125 22.5469C19.8125 20.4929 21.4772 18.8281 23.5312 18.8281C23.8074 18.8281 24.0312 18.6043 24.0312 18.3281C24.0312 18.052 23.8074 17.8281 23.5312 17.8281C21.4772 17.8281 19.8125 16.1634 19.8125 14.1094C19.8125 13.8332 19.5886 13.6094 19.3125 13.6094C19.0364 13.6094 18.8125 13.8332 18.8125 14.1094C18.8125 16.1634 17.1478 17.8281 15.0938 17.8281C14.8176 17.8281 14.5938 18.052 14.5938 18.3281C14.5938 18.6043 14.8176 18.8281 15.0938 18.8281C17.1478 18.8281 18.8125 20.4929 18.8125 22.5469C18.8125 22.823 19.0364 23.0469 19.3125 23.0469ZM19.3125 20.4305C18.8567 19.5236 18.1171 18.7839 17.2101 18.3281C18.1171 17.8723 18.8567 17.1327 19.3125 16.2258C19.7683 17.1327 20.5079 17.8723 21.4149 18.3281C20.5079 18.7839 19.7683 19.5236 19.3125 20.4305Z" fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.28125 7.57812C3.55739 7.57812 3.78125 7.35427 3.78125 7.07812C3.78125 5.80083 4.81645 4.76562 6.09375 4.76562C6.36989 4.76562 6.59375 4.54177 6.59375 4.26562C6.59375 3.98948 6.36989 3.76562 6.09375 3.76562C4.81645 3.76562 3.78125 2.73042 3.78125 1.45312C3.78125 1.17698 3.55739 0.953125 3.28125 0.953125C3.00511 0.953125 2.78125 1.17698 2.78125 1.45312C2.78125 2.73042 1.74605 3.76562 0.46875 3.76562C0.192608 3.76562 -0.03125 3.98948 -0.03125 4.26562C-0.03125 4.54177 0.192608 4.76562 0.46875 4.76562C1.74605 4.76562 2.78125 5.80083 2.78125 7.07812C2.78125 7.35427 3.00511 7.57812 3.28125 7.57812ZM3.28125 5.32717C3.01319 4.89747 2.6494 4.53368 2.21971 4.26562C2.6494 3.99757 3.01319 3.63378 3.28125 3.20408C3.54931 3.63378 3.9131 3.99757 4.34279 4.26562C3.9131 4.53368 3.54931 4.89747 3.28125 5.32717Z" fill="currentColor"></path>
+                <path d="M13.0781 14.25C12.8195 14.25 12.6094 14.0399 12.6094 13.7812C12.6094 13.5226 12.8195 13.3125 13.0781 13.3125C13.3368 13.3125 13.5469 13.5226 13.5469 13.7812C13.5469 14.0399 13.3368 14.25 13.0781 14.25Z" fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5938 20.2344C10.8699 20.2344 11.0938 20.0105 11.0938 19.7344C11.0938 18.2564 11.4973 16.874 12.1999 15.69C12.3408 15.4525 12.2625 15.1458 12.025 15.0049C11.7876 14.8639 11.4808 14.9422 11.3399 15.1797C11.0411 15.6833 10.7903 16.2188 10.5938 16.7798C9.69772 14.2206 7.67019 12.193 5.11104 11.2969C7.67012 10.4007 9.6976 8.37324 10.5938 5.81417C11.4899 8.37331 13.5175 10.4008 16.0767 11.2969C15.5157 11.4934 14.9802 11.7441 14.4766 12.043C14.2391 12.1839 14.1609 12.4906 14.3018 12.7281C14.4427 12.9656 14.7495 13.0439 14.9869 12.903C16.171 12.2004 17.5532 11.7969 19.0312 11.7969C19.3074 11.7969 19.5312 11.573 19.5312 11.2969C19.5312 11.0207 19.3074 10.7969 19.0312 10.7969C14.6475 10.7969 11.0938 7.24308 11.0938 2.85938C11.0938 2.58323 10.8699 2.35938 10.5938 2.35938C10.3176 2.35938 10.0938 2.58323 10.0938 2.85938C10.0938 7.24308 6.53995 10.7969 2.15625 10.7969C1.88011 10.7969 1.65625 11.0207 1.65625 11.2969C1.65625 11.573 1.88011 11.7969 2.15625 11.7969C6.53995 11.7969 10.0938 15.3507 10.0938 19.7344C10.0938 20.0105 10.3176 20.2344 10.5938 20.2344Z" fill="currentColor"></path>
+              </g>
+              <defs>
+                <clipPath id="clip0_598_8027">
+                  <rect width="24" height="24" fill="white"></rect>
+                </clipPath>
+              </defs>
+            </g>
+          </svg>
+        </span>
+        <span>{{ block.settings.text }}</span>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+.scrolling-banner {
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  position: relative;
+}
+
+.scrolling-content {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.banner-item {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 65px;
+}
+
+.banner-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: inline-flex;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .scrolling-banner {
+    height: 50px;
+  }
+  .banner-item {
+    font-size: 14px !important;
+  }
+  .banner-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const banner = document.querySelector('.scrolling-content');
+  if (banner && !banner.dataset.duplicated) {
+    banner.innerHTML += banner.innerHTML;
+    banner.dataset.duplicated = "true";
+  }
+});
+</script>

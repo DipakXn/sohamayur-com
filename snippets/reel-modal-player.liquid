@@ -1,0 +1,479 @@
+{%- comment -%}
+  Global Reel Modal Player
+  - Desktop: centered 9:16 dialog
+  - Mobile: full screen
+  - Uses Swiper (expects it already on page; if not, loads via CDN guard)
+  - Public API: window.openReelModal({ sectionId, startIndex })
+{%- endcomment -%}
+
+<div id="reels-modal" class="reels-modal hidden" aria-hidden="true">
+  <div class="reels-backdrop"></div>
+
+  <div class="reels-dialog">
+    <!-- Close -->
+    <button class="reels-close" aria-label="Close">&times;</button>
+
+    <!-- Mute toggle -->
+    <button class="reels-audio" aria-label="Mute/Unmute">
+      <svg class="icon-sound-on" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+      </svg>
+      <svg class="icon-sound-off" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+  <line x1="15" y1="9" x2="21" y2="15" />
+  <line x1="21" y1="9" x2="15" y2="15" />
+</svg>
+    </button>
+
+    <!-- Arrows -->
+    <button class="reels-nav prev" aria-label="Previous">‹</button>
+    <button class="reels-nav next" aria-label="Next">›</button>
+
+    <!-- Swiper -->
+    <div class="swiper reels-swiper">
+      <div class="swiper-wrapper"><!-- slides injected by JS --></div>
+    </div>
+
+    <!-- Right vertical: likes / share / views -->
+    <div class="reels-side">
+
+  <!-- Views Top -->
+  <div class="side-btn views-block">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+    <div class="count view-count">0</div>
+  </div>
+
+  <!-- Likes Middle -->
+  <button class="side-btn like" aria-label="Like">
+    <svg class="heart" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+    <div class="count like-count">0</div>
+  </button>
+
+  <!-- Share last -->
+  <button class="side-btn share" aria-label="Share">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <path d="M8.59 13.51l6.83 3.98" />
+      <path d="M15.41 6.51L8.59 10.49" />
+    </svg>
+  </button>
+
+</div>
+
+
+    <!-- Bottom product panel (A1) -->
+    <div class="reels-product">
+      <div class="prod-left">
+        <img class="prod-thumb" alt="prod-thumb" width="" height="">
+        <div class="prod-meta">
+          <div class="prod-title"></div>
+          <div class="prod-price-wrapper">
+          <div class="prod-price"></div> 
+                <div class="prod-compare-price"></div> 
+        </div>
+      </div>
+      </div>
+      <a class="prod-buy" href="#" aria-label="Buy Now">Buy Now</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Container */
+  .reels-modal{position:fixed; inset:0; z-index:9999;}
+  .reels-modal.hidden{display:none;}
+  .reels-backdrop{position:absolute; inset:0; background:rgba(0,0,0,.8);}
+
+  /* MAIN FIX: video container becomes real boundary */
+  .reels-dialog{
+  position:absolute;
+  inset:0;
+  margin:auto;
+  width: min(90vw, 440px); /* shrink responsively but max 440px */
+  aspect-ratio: 9 / 16; /* keep vertical reel shape */
+  max-height: 90vh; /* prevent overflowing screen height */
+  border-radius:16px;
+  overflow:hidden !important;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+  
+
+  /* Swiper area fills dialog */
+  .reels-swiper,
+  .reels-swiper .swiper-wrapper,
+  .reels-swiper .swiper-slide{
+    width:100%;
+    height:100%;
+  }
+  .reels-swiper video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    background:#000;
+  }
+
+  /* Controls inside video area */
+  .reels-dialog .reels-close,
+  .reels-dialog .reels-audio,
+  .reels-dialog .reels-nav.prev,
+  .reels-dialog .reels-nav.next{
+    position:absolute;
+    z-index:99999;
+  }
+
+  .reels-close{
+    top:18px; left:18px;
+    background:rgba(0,0,0,.5); color:#fff; border:0; width:36px; height:36px;
+    border-radius:50%; font-size:22px; line-height:1; display:flex; align-items:center; justify-content:center;
+  }
+
+  .reels-audio{
+    top:18px; right:18px;
+    background:rgba(0,0,0,.5); border:0; width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* center cross in mute icon */
+.reels-audio svg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+  .reels-audio .icon-sound-off{ display:none; }
+
+  .reels-nav{
+    background:rgba(0,0,0,.45); color:#fff; border:0; width:40px; height:56px; border-radius:12px; font-size:28px;
+  }
+  .reels-nav.prev{ left:15px; top:50%; transform:translateY(-50%); }
+  .reels-nav.next{ right:15px; top:50%; transform:translateY(-50%); }
+
+  /* Right side icons */
+  .reels-side{
+    position:absolute;
+    right:18px;
+    bottom:160px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    z-index:10;
+  }
+  .side-btn{ background:transparent; border:0; display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; }
+  .side-btn .heart{ transition:transform .25s ease; }
+  .side-btn.liked .heart{ fill:red; stroke:red; transform:scale(1.2); }
+  .side-btn .count{ color:#fff; font-size:12px; font-weight:600; opacity:.9; }
+
+  /* Bottom Product Box */
+ .reels-product{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  z-index:10;
+  background:rgba(0,0,0,.55); backdrop-filter: blur(1px);
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:10px;
+  border-radius: 10px; 
+}
+  .reels-product .prod-left{ display:flex; gap:10px; align-items:center; }
+  .reels-product .prod-thumb{ width:48px; height:64px; object-fit:cover; border-radius:8px; background:#111; }
+  .reels-product .prod-title{ 
+    color:#fff; 
+    font-weight:700; 
+    font-size:14px; 
+    line-height:1.2; 
+    max-width:220px; 
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+  }
+.reels-product .prod-price-wrapper{ 
+  display: flex; 
+  align-items: baseline;
+  gap: 8px; 
+  margin-top: 5px;
+}
+.reels-product .prod-price{ 
+  color: #fff; 
+  opacity: 1; 
+  font-weight: 700;
+  line-height: 1;
+}
+.reels-product .prod-compare-price{
+  color: #fff;
+  opacity: .7; 
+  text-decoration: line-through;
+  white-space: nowrap; 
+}  .reels-product .prod-buy{
+    display:inline-flex; justify-content:center; align-items:center;
+    height:44px; padding:0 18px; background:#ffffff; color:#853c3c; text-decoration:none; font-weight:700; border-radius:10px; flex:0 0 auto;
+  }
+
+ @media (max-width: 767px){
+
+  .reels-dialog {
+    width: 100vw !important;
+    height: 100vh !important;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+    .reels-side{ 
+        bottom:150px; /* You may adjust this value */
+    }
+    .reels-product .prod-title{ max-width:55vw; }
+    
+    /* Optional: Ensure controls are not too close to the edge on mobile */
+    /* Ensure the close button is positioned lower than the very top edge */
+    .reels-close {
+        top: 10px; /* Push down slightly from 18px */
+        left: 10px; /* Adjust if needed */
+    }
+    
+    .reels-audio {
+        top: 10px; /* Match the close button vertical position */
+        right: 20px; /* Adjust if needed */
+    }
+    
+    /* Remove rounded corners from the product box on full-screen mobile */
+    .reels-dialog {
+        border-radius: 0;
+    }
+    .reels-product {
+        border-radius: 0;
+    }
+    
+    /* Reposition the side icons slightly lower or higher if needed */
+    .reels-side {
+        right: 10px;
+        bottom: 120px; /* Reduced from 150px to fit better with smaller product panel */
+    }
+  .prev{ left:25px !important; top:50%; transform:translateY(-50%); }
+  .next{ right:25px !important; top:50%; transform:translateY(-50%); }
+
+}
+</style>
+
+
+<script>
+(function(){
+  // Ensure Swiper exists (guard)
+  if (!window.Swiper && !document.getElementById('reels-swiper-js')) {
+    var s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js'; s.id='reels-swiper-js';
+    document.head.appendChild(s);
+  }
+
+  window.ReelsRegistry = window.ReelsRegistry || {}; // { sectionId: [ {src, poster, title, url, price, views, likes, image} ] }
+
+  const modal = document.getElementById('reels-modal');
+  const wrapper = modal.querySelector('.reels-swiper .swiper-wrapper');
+  const btnClose = modal.querySelector('.reels-close');
+  const btnPrev = modal.querySelector('.reels-nav.prev');
+  const btnNext = modal.querySelector('.reels-nav.next');
+  const btnAudio = modal.querySelector('.reels-audio');
+  const heart = modal.querySelector('.side-btn.like');
+  const share = modal.querySelector('.side-btn.share');
+  const likeCountEl = modal.querySelector('.like-count');
+  const viewsCountEl = modal.querySelector('.views-count');
+  const prodThumb = modal.querySelector('.prod-thumb');
+  const prodTitle = modal.querySelector('.prod-title');
+  const prodPrice = modal.querySelector('.prod-price');
+  const prodComparePrice = modal.querySelector('.prod-compare-price'); 
+  const prodBuy = modal.querySelector('.prod-buy');
+
+  let swiper, items = [], currentSection = null, muted = true;
+
+  function buildSlides(){
+    wrapper.innerHTML = '';
+    items.forEach((it, idx)=>{
+      const slide = document.createElement('div');
+      slide.className = 'swiper-slide';
+      slide.innerHTML = `
+        <video ${muted ? 'muted' : ''} playsinline preload="metadata" poster="${it.poster || ''}">
+          <source src="${it.src}" type="video/mp4">
+        </video>
+      `;
+      wrapper.appendChild(slide);
+    });
+  }
+
+  function updateSideUI(i){
+    const it = items[i];
+    likeCountEl.textContent = it.likes || '0';
+    // format views -> remove word "Views" or "View"
+    let v = (it.views || '').toString().trim();
+    v = v.replace(/views?/i,'').trim();  // remove "Views"/"View"
+    document.querySelector('.view-count').textContent = v;
+
+    prodThumb.src = it.image || it.poster || '';
+    prodTitle.textContent = it.title || '';
+    prodBuy.href = it.url || '#';
+
+    // --- Price Logic ---
+    let currentPrice = it.price || '';
+    let comparePrice = it.compare_at_price || '';
+
+    if (comparePrice && comparePrice !== currentPrice) {
+        prodPrice.textContent = currentPrice;
+        prodComparePrice.textContent = comparePrice;
+    } else {
+        prodPrice.textContent = currentPrice;
+        prodComparePrice.textContent = '';
+    }
+    // -------------------
+
+    heart.classList.toggle('liked', !!it.__liked);
+  }
+
+  function playCurrent() {
+  // Pause and reset *all* videos immediately
+  modal.querySelectorAll('video').forEach(v => {
+    v.pause();
+    v.currentTime = 0; // actually reset position
+    v.muted = muted;
+  });
+
+  // Get the current active video
+  const activeVideo = modal.querySelector('.swiper-slide-active video');
+  if (activeVideo) {
+    activeVideo.muted = muted;
+
+    // Try to play immediately
+    const playPromise = activeVideo.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // If autoplay is blocked, wait for user gesture
+        activeVideo.addEventListener('touchstart', () => activeVideo.play(), { once: true });
+        activeVideo.addEventListener('click', () => activeVideo.play(), { once: true });
+      });
+    }
+  }
+}
+
+
+  function toggleAudioUI(){
+    btnAudio.querySelector('.icon-sound-on').style.display = muted ? 'none' : 'block';
+    btnAudio.querySelector('.icon-sound-off').style.display = muted ? 'block' : 'none';
+  }
+
+  async function shareCurrent(){
+    const i = swiper.realIndex;
+    const it = items[i];
+    const url = it?.url || window.location.href;
+    if (navigator.share) {
+      try { await navigator.share({ title: it?.title || document.title, url }); } catch(e){}
+    } else {
+      alert('Share not supported on this device.');
+    }
+  }
+
+  function likeCurrent(){
+    const i = swiper.realIndex;
+    const it = items[i];
+    it.__liked = !it.__liked;
+    heart.classList.toggle('liked', it.__liked);
+    // visual count bump
+    const n = parseInt((it.likes || '0'), 10) || 0;
+    likeCountEl.textContent = it.__liked ? (n+1) : n;
+  }
+
+  function initSwiper(startIndex){
+  if (swiper) { swiper.destroy(true, true); swiper = null; }
+
+  swiper = new Swiper(modal.querySelector('.reels-swiper'), {
+    slidesPerView: 1,
+    allowTouchMove: true,
+    navigation: { nextEl: btnNext, prevEl: btnPrev },
+    preloadImages: false,
+    watchSlidesProgress: true,
+    on: {
+      init() {
+        this.slideTo(startIndex, 0);
+        updateSideUI(this.realIndex);
+        playCurrent();
+      },
+      // Pause *before* slide transition starts
+      slideChangeTransitionStart() {
+        modal.querySelectorAll('video').forEach(v => {
+          v.pause();
+          v.currentTime = 0;
+        });
+      },
+      // After the transition ends, play the active one
+      slideChangeTransitionEnd() {
+        updateSideUI(this.realIndex);
+        playCurrent();
+      }
+    },
+  });
+}
+
+
+  function open({ sectionId, startIndex }){
+    currentSection = sectionId;
+    items = (window.ReelsRegistry[sectionId] || []).slice();
+    if (!items.length) return;
+
+    buildSlides();
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden','false');
+
+    // ensure Swiper ready
+    if (window.Swiper) { initSwiper(startIndex); } else {
+      document.getElementById('reels-swiper-js')?.addEventListener('load', ()=> initSwiper(startIndex), { once:true });
+    }
+    toggleAudioUI();
+  }
+
+  function close(){
+  modal.classList.add('hidden');
+  modal.setAttribute('aria-hidden','true');
+
+  if (swiper) {
+    swiper.destroy(true, true);
+    swiper = null;
+  }
+
+  modal.querySelectorAll('video').forEach(v => {
+    v.pause();
+    v.currentTime = 0;
+  });
+}
+
+
+  // Expose
+  window.openReelModal = open;
+
+  // Events
+  btnClose.addEventListener('click', close);
+  share.addEventListener('click', (e)=>{ e.stopPropagation(); shareCurrent(); });
+  heart.addEventListener('click', (e)=>{ e.stopPropagation(); likeCurrent(); });
+
+  btnAudio.addEventListener('click', (e)=>{
+    e.stopPropagation(); muted = !muted; toggleAudioUI(); playCurrent();
+  });
+
+  // Close on backdrop click (outside dialog)
+  modal.addEventListener('click',(e)=>{
+    if (e.target === modal || e.target === modal.querySelector('.reels-backdrop')) close();
+  });
+
+  // Keyboard Esc
+  document.addEventListener('keydown', (e)=>{ if (!modal.classList.contains('hidden') && e.key === 'Escape') close(); });
+
+})();
+</script>

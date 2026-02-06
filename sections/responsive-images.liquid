@@ -1,0 +1,65 @@
+{% schema %}
+{
+  "name": "Responsive Images",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "text",
+      "id": "alt_text",
+      "label": "Alt Text",
+      "default": "Default alt text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Responsive Images",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="responsive-image-section">
+  <img src="{{ section.settings.desktop_image | img_url: 'master' }}" alt="{{ section.settings.alt_text }}" width="" height="" class="desktop-image">
+  <img src="{{ section.settings.mobile_image | img_url: 'master' }}" alt="{{ section.settings.alt_text }}" width="" height="" class="mobile-image">
+</div>
+
+<style>
+  .responsive-image-section {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+  .responsive-image-section img {
+    display: block;
+    margin: 0 auto;
+    max-width: 85%;
+  }
+  .responsive-image-section .mobile-image {
+    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    .responsive-image-section .desktop-image {
+      display: none;
+    }
+    .responsive-image-section .mobile-image {
+      display: block;
+      max-width: 100%;
+    }
+    .responsive-image-section {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+  }
+</style>

@@ -1,0 +1,103 @@
+{% schema %}
+{
+  "name": "Custom Info Columns",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Custom Info Columns"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="info-columns-wrapper">
+  <div class="info-column" data-target="description">
+    <h3>Description</h3>
+  </div>
+  <div class="info-column" data-target="health-benefits">
+    <h3>Health Benefits</h3>
+  </div>
+  <div class="info-column" data-target="usage-instruction">
+    <h3>Usage Instruction</h3>
+  </div>
+</div>
+
+<div class="info-content">
+  <div id="description" class="content active">
+    {{ product.metafields.custom.description }}
+  </div>
+  <div id="health-benefits" class="content">
+    {{ product.metafields.custom.health_benefits }}
+  </div>
+  <div id="usage-instruction" class="content">
+    {{ product.metafields.custom.usage_instruction }}
+  </div>
+</div>
+
+<style>
+  .info-columns-wrapper {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1300px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+  }
+  .info-column {
+    flex: 1;
+    margin: 0 20px;
+    padding: 20px;
+    border-radius: 40px;
+    background-color: #FCF4EA;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  .info-column:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-5px);
+  }
+  .info-column h3 {
+    margin: 0;
+  }
+  .info-content .content {
+    display: none;
+    max-width: 1220px;
+    margin: 0 auto;
+  }
+  .info-content .content.active {
+    display: block;
+  }
+  @media (max-width: 768px) {
+    .info-columns-wrapper {
+      flex-direction: column;
+    }
+    .info-column {
+      margin: 10px 0;
+    }
+    .info-content .content.active {
+    display: block;
+    margin: 0px 10px;
+}
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var columns = document.querySelectorAll('.info-column');
+    var contents = document.querySelectorAll('.info-content .content');
+
+    columns.forEach(function(column) {
+      column.addEventListener('click', function() {
+        var target = column.getAttribute('data-target');
+
+        contents.forEach(function(content) {
+          if (content.id === target) {
+            content.classList.add('active');
+          } else {
+            content.classList.remove('active');
+          }
+        });
+      });
+    });
+  });
+</script>

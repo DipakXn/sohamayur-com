@@ -1,0 +1,112 @@
+<div class="slider-container">
+    <div class="slider">
+        <div class="slide">
+            <img src="image1.jpg" alt="Ingredient 1">
+            <div class="content">
+                <h2>Ingredient 1</h2>
+                <p>Description of ingredient 1.</p>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="image2.jpg" alt="Ingredient 2">
+            <div class="content">
+                <h2>Ingredient 2</h2>
+                <p>Description of ingredient 2.</p>
+            </div>
+        </div>
+        <!-- Add more slides as needed -->
+    </div>
+    <div class="slider-nav">
+        <button class="prev">Prev</button>
+        <button class="next">Next</button>
+    </div>
+</div>
+
+<style>
+.slider-container {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    margin: auto;
+}
+
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.content {
+    text-align: center;
+    padding: 20px;
+}
+
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.slider-nav button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding: 10px;
+    }
+    
+    .slider-nav button {
+        padding: 5px;
+    }
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.querySelector('.slider');
+    const slides = document.querySelectorAll('.slide');
+    const prevButton = document.querySelector('.prev');
+    const nextButton = document.querySelector('.next');
+
+    let currentIndex = 0;
+
+    function showSlide(index) {
+        if (index >= slides.length) {
+            currentIndex = 0;
+        } else if (index < 0) {
+            currentIndex = slides.length - 1;
+        } else {
+            currentIndex = index;
+        }
+        slider.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
+    }
+
+    prevButton.addEventListener('click', function () {
+        showSlide(currentIndex - 1);
+    });
+
+    nextButton.addEventListener('click', function () {
+        showSlide(currentIndex + 1);
+    });
+
+    showSlide(currentIndex);
+});
+</script>

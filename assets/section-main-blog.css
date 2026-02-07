@@ -1,4 +1,8 @@
 .blog-articles {
+  --brand-accent: #F3A82E;
+  --brand-dark: #435E49;
+  --brand-soft: #FCF4EA;
+
   display: grid;
   grid-gap: 1rem;
   column-gap: var(--grid-mobile-horizontal-spacing);
@@ -41,6 +45,140 @@
   .blog-articles--collage > *:nth-child(3n + 2):last-child .article-card__image--large .ratio::before {
     padding-bottom: 66rem;
   }
+}
+
+@media screen and (min-width: 1100px) {
+  .blog-articles {
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: var(--grid-desktop-horizontal-spacing);
+    row-gap: var(--grid-desktop-vertical-spacing);
+  }
+}
+
+.article-category {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 16px;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.read-more-btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 24px;
+  color: #fff;
+  background: linear-gradient(90deg, #F3A82E 0%, #E86300 100%);
+  text-decoration: none;
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+.blog-filter a {
+  color: var(--brand-dark);
+}
+
+.blog-filter a.active {
+  color: #fff;
+  background: linear-gradient(90deg, #F3A82E 0%, #E86300 100%);
+  padding: 6px 10px;
+  border-radius: 16px;
+}
+
+.blog-filter a.active:hover {
+  color: #fff;
+  background: linear-gradient(90deg, #F3A82E 0%, #E86300 100%);
+  padding: 6px 10px;
+  border-radius: 16px;
+}
+
+/* Improved filter layout */
+.blog-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.blog-filter strong { margin-right: 6px; color: var(--brand-dark); }
+.blog-filter a { text-decoration: none; padding: 6px 8px; border-radius: 14px; }
+.blog-filter a:hover { background: rgba(243,168,46,0.08); }
+
+/* Article card improvements */
+.article-card-wrapper .card {
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(67,94,73,0.08);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  overflow: hidden;
+}
+.article-card-wrapper .card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(67,94,73,0.12);
+}
+
+.article-category {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(67,94,73,0.06);
+}
+
+.tag-chips { margin-top: 8px; display:flex; gap:8px; flex-wrap:wrap; }
+.tag-chip { background:#f3f3f3; color: #435E49; font-size:12px; padding:6px 10px; border-radius:999px; }
+
+.read-more-btn { display:inline-block; text-decoration:none; }
+
+/* remove underline for titles & links inside cards */
+.article-card .card__heading a, .blog-filter a { text-decoration: none !important; }
+
+/* Title & excerpt font sizes */
+.article-card .card__heading { font-size: 22px; line-height:1.15; }
+.article-card__excerpt { font-size: 15px; color: #55656a; }
+
+@media screen and (min-width: 1100px) {
+  .article-card .card__heading { font-size: 24px; }
+  .article-card__excerpt { font-size: 16px; }
+}
+
+/* Category label + chips styles (matching reference) */
+.category-label {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background: linear-gradient(90deg,#E86300 0%,rgb(240, 174, 123) 100%);
+  color: #fff;
+  padding: 25px 14px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(232,99,0,0.08);
+  font-weight: 800;
+}
+
+@media only screen and (max-width: 768px) {
+  .category-label {
+  padding: 15px 14px !important;
+}
+}
+.category-label .folder-icon { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; background: rgba(255,255,255,0.12); border-radius:6px; }
+.category-label .category-label-text { font-size:14px; text-transform: uppercase;}
+
+.category-chips { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-left:12px; }
+.chip { display:inline-block; padding:8px 14px; border-radius:999px; background:#f3f3f3; color:var(--brand-dark); text-decoration:none; font-weight:400; font-size:14px; border:1px solid rgba(0,0,0,0.04); }
+.chip:hover { background: #eee; }
+.chip.active { background: var(--brand-accent); color:#fff; box-shadow: 0 8px 24px rgba(243,168,46,0.12); }
+
+/* Layout: label + chips on same row on wide screens */
+@media screen and (min-width: 750px) {
+  .blog-filter { flex-wrap: nowrap; }
+  .category-chips { margin-left: 14px; }
 }
 
 @media screen and (min-width: 990px) {

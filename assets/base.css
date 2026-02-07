@@ -3466,26 +3466,3 @@ details-disclosure > details {
     width: 44px !important;
   }
 }
-
-
-
-.tag-chips span {
-  background: #FCF4EA;
-  color: #435E49;
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  margin-right: 6px;
-}
-
-.read-more {
-  display: inline-block;
-  margin-top: 12px;
-  font-weight: 500;
-  color: #435E49;
-  text-decoration: none;
-}
-
-.read-more:hover {
-  color: #E68300;
-}

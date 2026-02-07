@@ -75,6 +75,28 @@
         {%- endif -%}
         <div class="card__content">
           <div class="card__information">
+            {%- comment -%}
+              Determine a category label to show on the card. Prefer a match from this curated list,
+              otherwise fall back to the article's first tag (if any).
+            {%- endcomment -%}
+            {%- assign preferred_categories = "General Wellness,Daily care,HealthCare,Pain Care" | split: "," -%}
+            {%- assign card_category = "" -%}
+            {%- for tag in article.tags -%}
+              {%- for pref in preferred_categories -%}
+                {%- assign pref_down = pref | downcase -%}
+                {%- assign tag_down = tag | downcase -%}
+                {%- if tag_down == pref_down -%}
+                  {%- assign card_category = tag -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endfor -%}
+            {%- if card_category == "" and article.tags.size > 0 -%}
+              {%- assign card_category = article.tags.first -%}
+            {%- endif -%}
+
+            {%- if card_category != "" -%}
+              <div class="article-category">{{ card_category }}</div>
+            {%- endif -%}
             <h3 class="card__heading{% if show_excerpt %} h2{% endif %}">
               <a href="{{ article.url }}" class="full-unstyled-link">
                 {{ article.title | truncate: 50 | escape }}
@@ -103,6 +125,17 @@
                   <span>{{ 'blogs.article.comments' | t: count: article.comments_count }}</span>
                 {%- endif -%}
               </div>
+
+              {%- comment -%} Tag chips (show up to 3 tags) {%- endcomment -%}
+              {% if article.tags.size > 0 %}
+                <div class="tag-chips">
+                  {% for t in article.tags limit:3 %}
+                    <span class="tag-chip">{{ t }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <a href="{{ article.url }}" class="read-more-btn">Read more</a>
             {%- endif -%}
           </div>
           {%- if show_badge -%}

@@ -20,28 +20,67 @@
   <div class="main-blog page-width section-{{ section.id }}-padding">
 
     <div class="blog-filter">
-  <strong>Categories:</strong>
+      <div class="category-label">
+        <span class="folder-icon" aria-hidden="true">
+          <!-- simple folder SVG -->
+          <svg width="800px" height="800px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 48 48">
+    <path fill="#FFA000" d="M40,12H22l-4-4H8c-2.2,0-4,1.8-4,4v8h40v-4C44,13.8,42.2,12,40,12z"/>
+    <path fill="#FFCA28" d="M40,12H8c-2.2,0-4,1.8-4,4v20c0,2.2,1.8,4,4,4h32c2.2,0,4-1.8,4-4V16C44,13.8,42.2,12,40,12z"/>
+</svg>
+        </span>
+        <span class="category-label-text">Categories</span>
+      </div>
 
-  <a href="{{ blog.url }}">All</a>
+      
+      <div class="category-chips">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- assign cat = block.settings.label -%}
+          {%- assign cat_handle = block.settings.tag | handle -%}
+          {%- if cat == 'All' -%}
+            {%- assign link = blog.url -%}
+          {%- else -%}
+            {%- assign link = blog.url | append: '/tagged/' | append: cat_handle -%}
+          {%- endif -%}
 
-  {% assign categories = "" %}
+          {%- assign is_active = false -%}
+          {%- if current_tags and cat != 'All' -%}
+            {%- if current_tags contains cat -%}{%- assign is_active = true -%}{%- endif -%}
+          {%- elsif request and request.path and cat != 'All' -%}
+            {%- assign tagged_path = '/tagged/' | append: cat_handle -%}
+            {%- if request.path contains tagged_path -%}{%- assign is_active = true -%}{%- endif -%}
+          {%- elsif cat == 'All' and request and request.path and request.path == blog.url -%}
+            {%- assign is_active = true -%}
+          {%- endif -%}
 
-  {% for article in blog.articles %}
-    {% for tag in article.tags %}
-      {% assign categories = categories | append: tag | append: "," %}
-    {% endfor %}
-  {% endfor %}
+          <a href="{{ link }}" class="chip {% if is_active %}active{% endif %}">{{ cat }}</a>
+        {%- endfor -%}
+      {%- else -%}
+        {% assign fixed_categories = "All,General Wellness,Skin & Hair Care,Pain Care & Relief,Immune Care,
+          Digestive Care,Diabetic Care,Blood & Detox Care" | split: "," %}
+        {% for cat in fixed_categories %}
+          {% if cat == 'All' %}
+            {% assign link = blog.url %}
+          {% else %}
+            {% assign cat_handle = cat | handle %}
+            {% assign link = blog.url | append: '/tagged/' | append: cat_handle %}
+          {% endif %}
 
-  {% assign uniqueCategories = categories | split: "," | uniq %}
+          {% assign is_active = false %}
+          {% if current_tags and cat != 'All' %}
+            {% if current_tags contains cat %}{% assign is_active = true %}{% endif %}
+          {% elsif request and request.path and cat != 'All' %}
+            {% assign tagged_path = '/tagged/' | append: cat_handle %}
+            {% if request.path contains tagged_path %}{% assign is_active = true %}{% endif %}
+          {% elsif cat == 'All' and request and request.path and request.path == blog.url %}
+            {% assign is_active = true %}
+          {% endif %}
 
-  {% for tag in uniqueCategories %}
-    {% if tag != blank %}
-      <a href="{{ blog.url }}/tagged/{{ tag | handle }}">
-        {{ tag }}
-      </a>
-    {% endif %}
-  {% endfor %}
-</div>
+          <a href="{{ link }}" class="chip {% if is_active %}active{% endif %}">{{ cat }}</a>
+        {% endfor %}
+      {%- endif -%}
+      </div>
+    </div>
 
     <h1 class="title--primary{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
       {{ blog.title | escape }}
@@ -172,6 +211,29 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "All" },
+        { "type": "text", "id": "tag", "label": "Tag (for URL)", "default": "all" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog",
+      "category": "Blog",
+      "blocks": [
+        { "type": "category", "settings": { "label": "All", "tag": "all" } },
+        { "type": "category", "settings": { "label": "General Wellness", "tag": "general-wellness" } },
+        { "type": "category", "settings": { "label": "Skin & Hair Care", "tag": "skin-hair-care" } },
+        { "type": "category", "settings": { "label": "Pain Care & Relief", "tag": "pain-care-relief" } }
+      ],
+      "settings": {}
     }
   ]
 }

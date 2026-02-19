@@ -1,0 +1,711 @@
+<section class="real-stories">
+  <div class="page-width">
+
+    <div class="real-stories-header">
+      <span class="tag">{{ section.settings.subtitle }}</span>
+      <h2 class="heading">{{ section.settings.heading }}</h2>
+      <p class="desc">{{ section.settings.description }}</p>
+    </div>
+
+    <div class="stories-slider-container">
+      <div class="stories-grid" id="storiesSlider">
+        {% for block in section.blocks %}
+          <div class="story-card" {{ block.shopify_attributes }}>
+            
+            <div class="story-video" data-video-wrapper>
+              <div class="video-aspect-vertical">
+                <img
+                  src="{{ block.settings.thumbnail | image_url: width: 600 }}"
+                  class="video-thumb" 
+                  width="600" 
+                  height="800"
+                  alt="Customer story"
+                  loading="lazy"
+                >
+                
+                <button class="play-button" data-play-btn aria-label="Play video">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 5V19L19 12L8 5Z" fill="currentColor"/>
+                  </svg>
+                </button>
+
+                <video
+                  class="story-player"
+                  controls
+                  playsinline
+                  preload="none"
+                  poster="{{ block.settings.thumbnail | image_url: width: 600 }}"
+                >
+                  <source src="{{ block.settings.video.sources[0].url }}" type="video/mp4">
+                </video>
+              </div>
+            </div>
+
+            <div class="story-content">
+              <div class="quote-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z" fill="currentColor"/>
+                </svg>
+              </div>
+              <blockquote class="story-message">
+                {{ block.settings.message }}
+              </blockquote>
+              {% if block.settings.author_name != blank %}
+                <div class="story-author">
+                  <span class="author-name">{{ block.settings.author_name }}</span>
+                  {% if block.settings.author_title != blank %}
+                    <span class="author-title">{{ block.settings.author_title }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+      
+      <!-- Mobile Slider Navigation -->
+      <div class="slider-nav" id="sliderNav">
+        <button class="slider-arrow slider-prev" aria-label="Previous story">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="slider-dots" id="sliderDots"></div>
+        <button class="slider-arrow slider-next" aria-label="Next story">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.real-stories {
+  background: linear-gradient(180deg, #FCF4EA 0%, #F6EDE3 100%);
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.real-stories::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -5%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(243, 168, 46, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.page-width {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.real-stories-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #435E49;
+  background: rgba(67, 94, 73, 0.08);
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.heading {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.2;
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+
+.desc {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.stories-slider-container {
+  position: relative;
+  z-index: 1;
+}
+
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  position: relative;
+  align-items: start;
+}
+
+.story-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(67, 94, 73, 0.06);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  height: 890px;
+  max-height: calc(150vh - 0px);
+}
+
+.story-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(67, 94, 73, 0.1);
+}
+
+.story-video {
+  position: relative;
+  background: #1a1a1a;
+  flex-shrink: 0;
+}
+
+/* 9:16 Aspect Ratio - Constrained height */
+.video-aspect-vertical {
+  position: relative;
+  padding-bottom: 177.77%; /* 16:9 inverted for 9:16 */
+  height: 0;
+  overflow: hidden;
+  max-height: 45vh; /* Limit video height to viewport */
+}
+
+.video-aspect-vertical .video-thumb,
+.video-aspect-vertical .story-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: opacity 0.3s ease, transform 0.6s ease;
+}
+
+.video-thumb {
+  opacity: 1;
+}
+
+.story-card:hover .video-thumb {
+  transform: scale(1.03);
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #435E49;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.play-button:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: #F3A82E;
+  color: #ffffff;
+  box-shadow: 0 8px 28px rgba(243, 168, 46, 0.4);
+}
+
+.play-button svg {
+  margin-left: 2px;
+}
+
+.story-player {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.story-player.active {
+  opacity: 1;
+}
+
+.story-content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Allow flex shrinking */
+}
+
+.quote-icon {
+  color: #F3A82E;
+  opacity: 0.25;
+  margin-bottom: 10px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.story-message {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  margin: 0 0 16px;
+  flex: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.story-author {
+  padding-top: 12px;
+  border-top: 1px solid rgba(67, 94, 73, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.author-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.author-title {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Video playing state */
+.story-video.playing .video-thumb,
+.story-video.playing .play-button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.story-video.playing .story-player {
+  display: block;
+  opacity: 1;
+}
+
+/* Slider Navigation - Hidden on Desktop */
+.slider-nav {
+  display: none;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1200px) {
+  .stories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  
+  .story-card {
+    max-height: none;
+  }
+  
+  .video-aspect-vertical {
+    max-height: 50vh;
+  }
+}
+
+/* Responsive - Mobile Slider */
+@media (max-width: 768px) {
+  .real-stories {
+    padding: 60px 0;
+    min-height: auto;
+  }
+  
+  .page-width {
+    padding: 0;
+  }
+  
+  .real-stories-header {
+    padding: 0 20px;
+    margin-bottom: 30px;
+  }
+  
+  /* Slider Container */
+  .stories-slider-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .stories-grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    padding: 0 20px;
+    gap: 16px;
+  }
+  
+  .stories-grid::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+  .story-card {
+    flex: 0 0 85%;
+    max-width: 320px;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    height: auto;
+    max-height: none;
+    margin-right: 0;
+  }
+  
+  .story-card:first-child {
+    margin-left: calc((100vw - 85%) / 2 - 20px);
+  }
+  
+  .story-card:last-child {
+    margin-right: calc((100vw - 85%) / 2 - 20px);
+  }
+  
+  /* Vertical layout for mobile cards */
+  .story-video {
+    width: 100%;
+    position: relative;
+  }
+  
+  .video-aspect-vertical {
+    padding-bottom: 177.77%; /* 9:16 ratio */
+    max-height: none;
+    position: relative;
+  }
+  
+  .video-aspect-vertical .video-thumb,
+  .video-aspect-vertical .story-player {
+    position: absolute;
+  }
+  
+  .story-content {
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .story-message {
+    -webkit-line-clamp: 3;
+    font-size: 14px;
+  }
+  
+  .play-button {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .play-button svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Slider Navigation */
+  .slider-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    padding: 0 20px;
+  }
+  
+  .slider-arrow {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(67, 94, 73, 0.2);
+    background: #ffffff;
+    color: #435E49;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+  
+  .slider-arrow:hover {
+    background: #435E49;
+    color: #ffffff;
+    border-color: #435E49;
+  }
+  
+  .slider-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .slider-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(67, 94, 73, 0.2);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .slider-dot.active {
+    background: #F3A82E;
+    transform: scale(1.2);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .story-card,
+  .play-button,
+  .video-thumb,
+  .stories-grid {
+    transition: none;
+  }
+  
+  .story-card:hover {
+    transform: none;
+  }
+  
+  .stories-grid {
+    scroll-behavior: auto;
+  }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const videoWrappers = document.querySelectorAll('[data-video-wrapper]');
+  const slider = document.getElementById('storiesSlider');
+  const dotsContainer = document.getElementById('sliderDots');
+  const prevBtn = document.querySelector('.slider-prev');
+  const nextBtn = document.querySelector('.slider-next');
+  
+  // Video functionality
+  videoWrappers.forEach(wrapper => {
+    const btn = wrapper.querySelector('[data-play-btn]');
+    const video = wrapper.querySelector('.story-player');
+    
+    btn.addEventListener('click', () => {
+      wrapper.classList.add('playing');
+      video.play();
+      video.setAttribute('controls', 'true');
+    });
+    
+    video.addEventListener('ended', () => {
+      wrapper.classList.remove('playing');
+      video.currentTime = 0;
+    });
+    
+    video.addEventListener('play', () => {
+      videoWrappers.forEach(otherWrapper => {
+        if (otherWrapper !== wrapper) {
+          const otherVideo = otherWrapper.querySelector('.story-player');
+          if (!otherVideo.paused) {
+            otherVideo.pause();
+            otherWrapper.classList.remove('playing');
+          }
+        }
+      });
+    });
+  });
+  
+  // Mobile Slider functionality
+  if (window.innerWidth <= 768 && slider && dotsContainer) {
+    const cards = slider.querySelectorAll('.story-card');
+    const totalSlides = cards.length;
+    let currentSlide = 0;
+    
+    // Create dots
+    cards.forEach((_, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'slider-dot';
+      dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+      if (index === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => goToSlide(index));
+      dotsContainer.appendChild(dot);
+    });
+    
+    const dots = dotsContainer.querySelectorAll('.slider-dot');
+    
+    function updateDots() {
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+    
+    function updateArrows() {
+      if (prevBtn) prevBtn.disabled = currentSlide === 0;
+      if (nextBtn) nextBtn.disabled = currentSlide === totalSlides - 1;
+    }
+    
+    function goToSlide(index) {
+      if (index < 0 || index >= totalSlides) return;
+      currentSlide = index;
+      const card = cards[index];
+      card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      updateDots();
+      updateArrows();
+    }
+    
+    // Arrow navigation
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+    }
+    
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+    }
+    
+    // Update current slide on scroll
+    let scrollTimeout;
+    slider.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const scrollLeft = slider.scrollLeft;
+        const cardWidth = cards[0].offsetWidth + 16; // Including gap
+        const newSlide = Math.round(scrollLeft / cardWidth);
+        if (newSlide !== currentSlide && newSlide >= 0 && newSlide < totalSlides) {
+          currentSlide = newSlide;
+          updateDots();
+          updateArrows();
+        }
+      }, 150);
+    });
+    
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    slider.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    slider.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+    
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0 && currentSlide < totalSlides - 1) {
+          goToSlide(currentSlide + 1);
+        } else if (diff < 0 && currentSlide > 0) {
+          goToSlide(currentSlide - 1);
+        }
+      }
+    }
+    
+    updateArrows();
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Real Stories",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Real Stories"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Hear From Our Customers"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Real people, real results. Discover how our products have transformed lives."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "Video Story",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Upload / Select Video (9:16 vertical recommended)"
+        },
+        {
+          "type": "image_picker",
+          "id": "thumbnail",
+          "label": "Video Thumbnail"
+        },
+        {
+          "type": "textarea",
+          "id": "message",
+          "label": "Testimonial Message",
+          "default": "This product completely changed my daily routine. I can't imagine going back!"
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author Name",
+          "default": "Sarah Johnson"
+        },
+        {
+          "type": "text",
+          "id": "author_title",
+          "label": "Author Title / Location",
+          "default": "Verified Buyer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Real Stories"
+    }
+  ]
+}
+{% endschema %}

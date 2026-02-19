@@ -1,0 +1,344 @@
+{% comment %}
+  Proven Results Section
+  Features: Before/After Video Comparison Slider with Testimonial Carousel
+  Location: sections/proven-results.liquid
+{% endcomment %}
+
+{{ 'section-proven-results.css' | asset_url | stylesheet_tag }}
+{{ 'proven-results.js' | asset_url | script_tag }}
+
+<section id="proven-results-{{ section.id }}" class="proven-results-section color-{{ section.settings.color_scheme }}">
+  <div class="page-width proven-results-container">
+    
+    {% comment %} Section Header {% endcomment %}
+    <div class="proven-results-header">
+      {% if section.settings.subtitle != blank %}
+        <span class="proven-results-subtitle">{{ section.settings.subtitle }}</span>
+      {% endif %}
+      {% if section.settings.title != blank %}
+        <h2 class="proven-results-title">{{ section.settings.title }}</h2>
+      {% endif %}
+      {% if section.settings.description != blank %}
+        <p class="proven-results-description">{{ section.settings.description }}</p>
+      {% endif %}
+    </div>
+
+    {% comment %} Main Content Grid {% endcomment %}
+    <div class="proven-results-grid">
+      
+      {% comment %} Before/After Videos (Side by side with play buttons) {% endcomment %}
+      <div class="proven-results-media">
+        <div class="video-comparison-wrapper" data-video-comparison>
+          <div class="video-comparison-container">
+            
+            {% comment %} Before Video {% endcomment %}
+            <div class="video-item video-item-before" data-video-item>
+              <div class="video-item-inner">
+                <video 
+                  playsinline
+                  poster="{{ section.settings.before_video_poster | image_url: width: 1200 }}"
+                  class="comparison-video"
+                >
+                  {% if section.settings.before_video != blank %}
+                    <source src="{{ section.settings.before_video.sources[1].url }}" type="video/mp4">
+                  {% endif %}
+                </video>
+                <button type="button" class="video-play-button" data-video-play-button aria-label="Play before video">
+                  <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="12" cy="12" r="11" fill="white" />
+                    <path d="M10 9L15 12L10 15V9Z" fill="black" />
+                  </svg>
+                </button>
+                <span class="video-label video-label-before">{{ section.settings.before_label }}</span>
+              </div>
+            </div>
+
+            {% comment %} After Video {% endcomment %}
+            <div class="video-item video-item-after" data-video-item>
+              <div class="video-item-inner">
+                <video 
+                  playsinline
+                  poster="{{ section.settings.after_video_poster | image_url: width: 1200 }}"
+                  class="comparison-video"
+                >
+                  {% if section.settings.after_video != blank %}
+                    <source src="{{ section.settings.after_video.sources[1].url }}" type="video/mp4">
+                  {% endif %}
+                </video>
+                <button type="button" class="video-play-button" data-video-play-button aria-label="Play after video">
+                  <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="12" cy="12" r="11" fill="white" />
+                    <path d="M10 9L15 12L10 15V9Z" fill="black" />
+                  </svg>
+                </button>
+                <span class="video-label video-label-after">{{ section.settings.after_label }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {% comment %} Testimonial Slider {% endcomment %}
+      <div class="proven-results-content">
+        <div class="testimonial-slider" data-testimonial-slider>
+          
+          <div class="testimonial-track" data-testimonial-track>
+            {% for block in section.blocks %}
+              <div class="testimonial-slide" data-testimonial-slide {{ block.shopify_attributes }}>
+                
+                {% if block.settings.timeline_badge != blank %}
+                  <div class="timeline-badge">
+                    <span>{{ block.settings.timeline_badge }}</span>
+                  </div>
+                {% endif %}
+
+                <div class="testimonial-header">
+                  {% if block.settings.customer_name != blank %}
+                    <h3 class="customer-name">{{ block.settings.customer_name }}</h3>
+                  {% endif %}
+                  {% if block.settings.product_name != blank %}
+                    <span class="product-name">{{ block.settings.product_name }}</span>
+                  {% endif %}
+                </div>
+
+                {% if block.settings.testimonial_text != blank %}
+                  <div class="testimonial-text">
+                    <p>{{ block.settings.testimonial_text }}</p>
+                  </div>
+                {% endif %}
+
+                {% comment %} Stats Grid {% endcomment %}
+                {% if block.settings.show_stats %}
+                  <div class="testimonial-stats">
+                    {% if block.settings.stat_1_value != blank %}
+                      <div class="stat-item">
+                        <span class="stat-value">{{ block.settings.stat_1_value }}</span>
+                        <span class="stat-label">{{ block.settings.stat_1_label }}</span>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.stat_2_value != blank %}
+                      <div class="stat-item">
+                        <span class="stat-value">{{ block.settings.stat_2_value }}</span>
+                        <span class="stat-label">{{ block.settings.stat_2_label }}</span>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.stat_3_value != blank %}
+                      <div class="stat-item">
+                        <span class="stat-value">{{ block.settings.stat_3_value }}</span>
+                        <span class="stat-label">{{ block.settings.stat_3_label }}</span>
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endif %}
+
+              </div>
+            {% endfor %}
+          </div>
+
+          {% comment %} Slider Controls {% endcomment %}
+          <div class="slider-controls">
+            <button class="slider-btn slider-prev" data-slider-prev aria-label="Previous testimonial">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            
+            <div class="slider-dots" data-slider-dots>
+              {% for block in section.blocks %}
+                <button class="slider-dot{% if forloop.first %} active{% endif %}" data-slide-index="{{ forloop.index0 }}" aria-label="Go to slide {{ forloop.index }}"></button>
+              {% endfor %}
+            </div>
+
+            <button class="slider-btn slider-next" data-slider-next aria-label="Next testimonial">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Proven Results",
+  "tag": "section",
+  "class": "section-proven-results",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "PROVEN RESULTS"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Before & After Transformations"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "See the visible difference our authentic Ayurvedic formulations make. Real transformations from real customers."
+    },
+    {
+      "type": "header",
+      "content": "Before/After Video Settings"
+    },
+    {
+      "type": "video",
+      "id": "before_video",
+      "label": "Before Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_video_poster",
+      "label": "Before Video Poster Image"
+    },
+    {
+      "type": "video",
+      "id": "after_video",
+      "label": "After Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_video_poster",
+      "label": "After Video Poster Image"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before Label",
+      "default": "BEFORE"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After Label",
+      "default": "AFTER"
+    },
+    {
+      "type": "text",
+      "id": "drag_text",
+      "label": "Drag Instruction Text",
+      "default": "Drag to compare"
+    },
+    {
+      "type": "range",
+      "id": "comparison_position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Initial Comparison Position",
+      "default": 50
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "text",
+          "id": "timeline_badge",
+          "label": "Timeline Badge",
+          "default": "12 Weeks of consistent use",
+          "info": "e.g., '12 Weeks of consistent use'"
+        },
+        {
+          "type": "text",
+          "id": "customer_name",
+          "label": "Customer Name",
+          "default": "Deepika M."
+        },
+        {
+          "type": "text",
+          "id": "product_name",
+          "label": "Product Name",
+          "default": "Anti-Aging Serum"
+        },
+        {
+          "type": "textarea",
+          "id": "testimonial_text",
+          "label": "Testimonial Text",
+          "default": "Smoother, firmer skin with reduced fine lines around eyes and forehead."
+        },
+        {
+          "type": "header",
+          "content": "Statistics"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_stats",
+          "label": "Show Statistics",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "stat_1_value",
+          "label": "Stat 1 Value",
+          "default": "95%"
+        },
+        {
+          "type": "text",
+          "id": "stat_1_label",
+          "label": "Stat 1 Label",
+          "default": "Saw improvement"
+        },
+        {
+          "type": "text",
+          "id": "stat_2_value",
+          "label": "Stat 2 Value",
+          "default": "4-8"
+        },
+        {
+          "type": "text",
+          "id": "stat_2_label",
+          "label": "Stat 2 Label",
+          "default": "Weeks for results"
+        },
+        {
+          "type": "text",
+          "id": "stat_3_value",
+          "label": "Stat 3 Value",
+          "default": "100%"
+        },
+        {
+          "type": "text",
+          "id": "stat_3_label",
+          "label": "Stat 3 Label",
+          "default": "Natural ingredients"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Proven Results",
+      "blocks": [
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

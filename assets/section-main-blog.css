@@ -87,7 +87,6 @@
   padding: 6px 10px;
   border-radius: 16px;
 }
-
 .blog-filter a.active:hover {
   color: #fff;
   background: linear-gradient(90deg, #F3A82E 0%, #E86300 100%);
@@ -167,6 +166,7 @@
   padding: 15px 14px !important;
 }
 }
+
 .category-label .folder-icon { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; background: rgba(255,255,255,0.12); border-radius:6px; }
 .category-label .category-label-text { font-size:14px; text-transform: uppercase;}
 

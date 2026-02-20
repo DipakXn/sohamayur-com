@@ -40,7 +40,10 @@
                   class="comparison-video"
                 >
                   {% if section.settings.before_video != blank %}
-                    <source src="{{ section.settings.before_video.sources[1].url }}" type="video/mp4">
+                      {% for src in section.settings.before_video.sources %}
+                        <source src="{{ src.url }}" type="{{ src.mime_type }}">
+                        {% break %}
+                      {% endfor %}
                   {% endif %}
                 </video>
                 <button type="button" class="video-play-button" data-video-play-button aria-label="Play before video">
@@ -62,7 +65,10 @@
                   class="comparison-video"
                 >
                   {% if section.settings.after_video != blank %}
-                    <source src="{{ section.settings.after_video.sources[1].url }}" type="video/mp4">
+                      {% for src in section.settings.after_video.sources %}
+                        <source src="{{ src.url }}" type="{{ src.mime_type }}">
+                        {% break %}
+                      {% endfor %}
                   {% endif %}
                 </video>
                 <button type="button" class="video-play-button" data-video-play-button aria-label="Play after video">

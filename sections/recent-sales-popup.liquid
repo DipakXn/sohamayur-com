@@ -1,0 +1,68 @@
+{% if section.settings.enable_popup %}
+
+<link rel="stylesheet" href="{{ 'sales-popup.css' | asset_url }}">
+<script src="{{ 'sales-popup.js' | asset_url }}" defer></script>
+
+<div id="recent-sales-popup"
+     class="recent-sales-popup"
+     data-delay="{{ section.settings.popup_delay }}">
+
+  <div class="popup-icon">
+    <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <g transform="translate(0 -1028.4)">
+  <rect height="14" width="14" y="1030.4" x="5" fill="#e67e22"/>
+  <path d="m4 5v16h16v-16h-16z" transform="translate(0 1028.4)" fill="#f1c40f"/>
+  <path d="m6 1031.4-2 2h2v-2z" fill="#f39c12"/>
+  <path d="m5 1030.4v2l1-1z" fill="#f1c40f"/>
+  <path d="m18 1031.4 2 2h-2v-2z" fill="#f39c12"/>
+  <path d="m19 1030.4v2l-1-1z" fill="#f1c40f"/>
+  <path d="m12 1045.4c2.761 0 5-2.3 5-5v-3h-1v3c0 2.2-1.791 4-4 4-2.2091 0-4-1.8-4-4v-3h-1v3c0 2.7 2.2386 5 5 5z" fill="#f39c12"/>
+  <path d="m12 1044.4c-2.7614 0-5-2.3-5-5v-3h1v3c0 2.2 1.7909 4 4 4 2.209 0 4-1.8 4-4v-3h1v3c0 2.7-2.239 5-5 5z" fill="#ecf0f1"/>
+  <path d="m17 1035.4v1h-1v-1h1zm-9 0v1h-1v-1h1z" fill="#f39c12"/>
+  <path d="m4 1049.4 1 1h2 10 2l1-1h-16z" fill="#f39c12"/>
+ </g>
+</svg>
+  </div>
+
+  <div class="popup-content">
+    <p class="popup-text">
+      <strong id="popup-customer">Vikram P.</strong>
+      from <span id="popup-city">Pune</span><br>
+      purchased <span id="popup-product">Hair Growth Serum</span>
+    </p>
+    <span class="popup-time" id="popup-time">12 min ago</span>
+  </div>
+
+  <button class="popup-close" aria-label="Close popup">×</button>
+
+</div>
+
+{% endif %}
+
+
+{% schema %}
+{
+  "name": "Recent Sales Popup",
+  "tag": "section",
+  "class": "recent-sales-popup-wrapper",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_popup",
+      "label": "Enable popup",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "popup_delay",
+      "label": "Popup interval (seconds)",
+      "default": 15
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recent Sales Popup"
+    }
+  ]
+}
+{% endschema %}

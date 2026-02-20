@@ -1,0 +1,566 @@
+/* ============================================
+   CONCERN TABS SECTION - KRISHNA'S BRAND COLORS
+   ============================================ */
+
+/* Brand Colors from provided image */
+:root {
+  /* Primary Colors */
+  --krishna-orange: #F3A82E;
+  --krishna-green-dark: #435E49;
+  --krishna-yellow: #FFEC00;
+  --krishna-brown: #471200;
+  
+  /* Secondary Colors */
+  --krishna-cyan: #23E8DE;
+  --krishna-lavender: #D3D2FF;
+  --krishna-blue: #8AC7FF;
+  --krishna-green-bright: #41AF00;
+  --krishna-orange-deep: #E86300;
+  --krishna-peach: #FCE0BB;
+  --krishna-cream: #FFFCBB;
+  --krishna-mint: #DDFC2;
+  
+  /* Web Colors */
+  --krishna-bg-tint: #FCF4EA;
+  
+  /* Functional */
+  --krishna-text: #1a1a1a;
+  --krishna-text-light: #666666;
+  --krishna-border: rgba(67, 94, 73, 0.15);
+}
+
+.concern-tabs-section {
+  background-color: var(--krishna-bg-tint);
+  font-family: inherit;
+}
+
+.concern-tabs__header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.concern-tabs__title {
+  font-size: 3rem;
+  font-weight: 400;
+  color: var(--krishna-text);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================
+   TAB NAVIGATION - HORIZONTAL SCROLLABLE
+   ============================================ */
+
+.concern-tabs__nav-wrapper {
+  position: relative;
+  margin-bottom: 2.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.concern-tabs__nav {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  justify-content: flex-start;
+}
+
+.concern-tabs__nav::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+/* Center on desktop if space allows */
+@media screen and (min-width: 990px) {
+  .concern-tabs__nav {
+    justify-content: center;
+  }
+}
+
+.concern-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: #ffffff;
+  border: 1px solid var(--krishna-border);
+  border-radius: 50px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--krishna-text-light);
+  box-shadow: 0 2px 4px rgba(67, 94, 73, 0.05);
+}
+
+.concern-tabs__tab:hover {
+  border-color: var(--krishna-green-dark);
+  color: var(--krishna-green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 94, 73, 0.1);
+}
+
+.concern-tabs__tab--active {
+  background: var(--krishna-green-dark);
+  border-color: var(--krishna-green-dark);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(67, 94, 73, 0.25);
+}
+
+.concern-tabs__tab-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.concern-tabs__tab-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.concern-tabs__tab-text {
+  line-height: 1.2;
+}
+
+/* ============================================
+   TAB PANELS & SLIDER
+   ============================================ */
+
+.concern-tabs__panels {
+  position: relative;
+  min-height: 400px;
+}
+
+.concern-tabs__panel {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.concern-tabs__panel--active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Swiper Container */
+.concern-tabs__slider {
+  position: relative;
+  padding: 0 3rem; /* Space for arrows */
+  overflow: hidden;
+}
+
+.concern-tabs__slider .swiper-wrapper {
+  align-items: stretch;
+}
+
+/* ============================================
+   PRODUCT CARDS
+   ============================================ */
+
+.concern-product-card {
+  height: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(67, 94, 73, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.concern-product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(67, 94, 73, 0.15);
+}
+
+.concern-product-card__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  flex: 1;
+}
+
+.concern-product-card__image-wrapper {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+  overflow: hidden;
+}
+
+.concern-product-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0;
+  transition: transform 0.5s ease;
+}
+
+.concern-product-card:hover .concern-product-card__image {
+  transform: scale(1.05);
+}
+
+.concern-product-card__placeholder {
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+}
+
+.concern-product-card__info {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.concern-product-card__title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--krishna-text);
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* min-height: 2.8em; */
+}
+
+.concern-product-card__price {
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.concern-product-card__price-amount {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--krishna-text);
+}
+
+/* ============================================
+   ADD TO CART BUTTON
+   ============================================ */
+
+.concern-product-card__actions {
+  padding: 0;
+  margin-top: auto;
+  margin-bottom: 1rem;
+}
+
+.concern-product-card__atc-btn {
+  width: 92%;
+  padding: 0.875rem 1rem;
+  background: var(--krishna-green-dark);
+  color: #ffffff;
+  border: 2px solid var(--krishna-green-dark);
+  border-radius: 8px;
+  font-size:1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.concern-product-card__atc-btn:hover:not(:disabled) {
+  background: var(--krishna-orange);
+  border-color: var(--krishna-orange);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(243, 168, 46, 0.3);
+}
+
+.concern-product-card__atc-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.concern-product-card__atc-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.concern-product-card__atc-btn--options {
+  background: transparent;
+  color: var(--krishna-green-dark);
+}
+
+.concern-product-card__atc-btn--options:hover {
+  background: var(--krishna-green-dark);
+  color: #ffffff;
+}
+
+.concern-product-card__atc-btn--soldout {
+  background: #e0e0e0;
+  border-color: #e0e0e0;
+  color: #999999;
+}
+
+.concern-product-card__atc-btn--success {
+  background: var(--krishna-green-bright) !important;
+  border-color: var(--krishna-green-bright) !important;
+}
+
+.atc-loader,
+.atc-success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* ============================================
+   SLIDER NAVIGATION
+   ============================================ */
+
+.concern-tabs__nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--krishna-border);
+  color: var(--krishna-green-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 2px 12px rgba(67, 94, 73, 0.1);
+}
+
+.concern-tabs__nav-btn:hover {
+  background: var(--krishna-green-dark);
+  color: #ffffff;
+  border-color: var(--krishna-green-dark);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.concern-tabs__nav-btn--prev {
+  left: 0;
+}
+
+.concern-tabs__nav-btn--next {
+  right: 0;
+}
+
+.concern-tabs__nav-btn.swiper-button-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.concern-tabs__pagination {
+  position: relative;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.concern-tabs__pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: var(--krishna-border);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.concern-tabs__pagination .swiper-pagination-bullet-active {
+  background: var(--krishna-green-dark);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* ============================================
+   VIEW ALL LINK
+   ============================================ */
+
+.concern-tabs__footer {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+
+.concern-tabs__view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--krishna-text-light);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.concern-tabs__view-all::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--krishna-green-dark);
+  transition: width 0.3s ease;
+}
+
+.concern-tabs__view-all:hover {
+  color: var(--krishna-green-dark);
+}
+
+.concern-tabs__view-all:hover::after {
+  width: 100%;
+}
+
+.concern-tabs__view-all svg {
+  transition: transform 0.3s ease;
+}
+
+.concern-tabs__view-all:hover svg {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
+.concern-tabs__empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--krishna-text-light);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  border: 2px dashed var(--krishna-border);
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Tablet */
+@media screen and (max-width: 989px) {
+  .concern-tabs__title {
+    font-size: 1.75rem;
+  }
+  
+  .concern-tabs__slider {
+    padding: 0 2.5rem;
+  }
+  
+  .concern-tabs__nav-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 749px) {
+  .concern-tabs-section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .concern-tabs__title {
+    font-size: 1.5rem;
+  }
+  
+  .concern-tabs__nav {
+    gap: 0.5rem;
+  }
+  
+  .concern-tabs__tab {
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+  }
+  
+  .concern-tabs__slider {
+    padding: 0 0 3rem 0; /* No side padding, space for pagination */
+  }
+  
+  .concern-tabs__nav-btn {
+    display: none; /* Hide arrows on mobile, use swipe */
+  }
+  
+  .concern-product-card__image-wrapper {
+    aspect-ratio: 4 / 5;
+  }
+  
+  .concern-product-card__info,
+  .concern-product-card__actions {
+    padding: 1rem;
+  }
+  
+  .concern-product-card__title {
+    font-size: 0.9375rem;
+  }
+  
+  .concern-product-card__price-amount {
+    font-size: 1rem;
+  }
+  
+  .concern-product-card__atc-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Small Mobile */
+@media screen and (max-width: 479px) {
+  .concern-tabs__tab {
+    padding: 0.5rem 0.875rem;
+  }
+  
+  .concern-tabs__tab-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.concern-tabs__tab:focus-visible,
+.concern-tabs__nav-btn:focus-visible,
+.concern-product-card__atc-btn:focus-visible {
+  outline: 2px solid var(--krishna-orange);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .concern-tabs__tab,
+  .concern-product-card,
+  .concern-product-card__image,
+  .concern-tabs__panel,
+  .concern-product-card__atc-btn {
+    transition: none;
+    animation: none;
+  }
+}

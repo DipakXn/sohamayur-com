@@ -1,0 +1,466 @@
+{% comment %}
+  Concern Tabs Section
+  - Horizontal scrollable tabs
+  - Collection-based product slider
+  - Responsive: 4/2/1 products per view
+{% endcomment %}
+
+{{ 'section-concern-tabs.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="concern-tabs-section section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    
+    {%- if section.settings.title != blank -%}
+      <div class="concern-tabs__header">
+        <h2 class="concern-tabs__title">{{ section.settings.title }}</h2>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Tab Navigation {%- endcomment -%}
+    <div class="concern-tabs__nav-wrapper">
+      <div class="concern-tabs__nav" role="tablist">
+        {%- for block in section.blocks -%}
+          <button 
+            class="concern-tabs__tab{% if forloop.first %} concern-tabs__tab--active{% endif %}"
+            data-tab-index="{{ forloop.index0 }}"
+            data-collection-handle="{{ block.settings.collection.handle }}"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="tab-panel-{{ block.id }}"
+            id="tab-{{ block.id }}"
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.icon != blank -%}
+              <span class="concern-tabs__tab-icon">
+                {{ block.settings.icon | image_url: width: 30 | image_tag: loading: 'lazy' }}
+              </span>
+            {%- endif -%}
+            <span class="concern-tabs__tab-text">{{ block.settings.tab_title }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} Tab Panels with Product Sliders {%- endcomment -%}
+    <div class="concern-tabs__panels">
+      {%- for block in section.blocks -%}
+        <div 
+          class="concern-tabs__panel{% if forloop.first %} concern-tabs__panel--active{% endif %}"
+          id="tab-panel-{{ block.id }}"
+          role="tabpanel"
+          aria-labelledby="tab-{{ block.id }}"
+          {{ block.shopify_attributes }}
+        >
+          {%- assign collection = block.settings.collection -%}
+          
+          {%- if collection != blank and collection.products_count > 0 -%}
+            <div class="concern-tabs__slider swiper" data-slider-id="{{ block.id }}">
+              <div class="swiper-wrapper">
+                {%- for product in collection.products limit: block.settings.products_limit -%}
+                  <div class="swiper-slide">
+                    <div class="concern-product-card" data-product-id="{{ product.id }}">
+                      <a href="{{ product.url }}" class="concern-product-card__link">
+                        <div class="concern-product-card__image-wrapper">
+                          {%- if product.featured_media -%}
+                            {{ product.featured_media | image_url: width: 400 | image_tag:
+                              class: 'concern-product-card__image',
+                              loading: 'lazy',
+                              alt: product.featured_media.alt | escape
+                            }}
+                          {%- else -%}
+                            {{ 'product-1' | placeholder_svg_tag: 'concern-product-card__placeholder' }}
+                          {%- endif -%}
+                        </div>
+                        
+                        <div class="concern-product-card__info">
+                          <h3 class="concern-product-card__title">{{ product.title }}</h3>
+                          
+                          <div class="concern-product-card__price">
+                            <span class="concern-product-card__price-amount">From {{ product.price | money }}</span>
+                          </div>
+                        </div>
+                      </a>
+                      
+                      {%- comment -%} Add to Cart Button {%- endcomment -%}
+                      <div class="concern-product-card__actions">
+                        {%- if product.available -%}
+                          {%- if product.variants.size == 1 -%}
+                            <button 
+                              type="button"
+                              class="concern-product-card__atc-btn"
+                              data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                              data-product-handle="{{ product.handle }}"
+                            >
+                              <span class="atc-text">Add to Cart</span>
+                              <span class="atc-loader" hidden>
+                                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.42" stroke-dashoffset="10">
+                                    <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"/>
+                                  </circle>
+                                </svg>
+                              </span>
+                              <span class="atc-success" hidden>Added!</span>
+                            </button>
+                          {%- else -%}
+                            <a href="{{ product.url }}" class="concern-product-card__atc-btn concern-product-card__atc-btn--options">
+                              Select Options
+                            </a>
+                          {%- endif -%}
+                        {%- else -%}
+                          <button type="button" class="concern-product-card__atc-btn concern-product-card__atc-btn--soldout" disabled>
+                            Sold Out
+                          </button>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+              
+              {%- comment -%} Navigation Arrows {%- endcomment -%}
+              <button class="concern-tabs__nav-btn concern-tabs__nav-btn--prev" aria-label="Previous slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button class="concern-tabs__nav-btn concern-tabs__nav-btn--next" aria-label="Next slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              
+              {%- comment -%} Pagination {%- endcomment -%}
+              <div class="concern-tabs__pagination swiper-pagination"></div>
+            </div>
+          {%- else -%}
+            <div class="concern-tabs__empty">
+              <p>No products found in this collection.</p>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.view_all_link != blank and section.settings.view_all_text != blank -%}
+      <div class="concern-tabs__footer">
+        <a href="{{ section.settings.view_all_link }}" class="concern-tabs__view-all">
+          {{ section.settings.view_all_text }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% comment %} Swiper.js CDN - Load once per page {% endcomment %}
+{%- unless content_for_header contains 'swiper' -%}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js" defer></script>
+{%- endunless -%}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sectionId = '{{ section.id }}';
+    const tabsSection = document.querySelector(`.section-${sectionId}-padding`).closest('.concern-tabs-section');
+    
+    // Initialize Swiper instances storage
+    const swipers = {};
+    
+    // Tab switching functionality
+    const tabs = tabsSection.querySelectorAll('.concern-tabs__tab');
+    const panels = tabsSection.querySelectorAll('.concern-tabs__panel');
+    
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => {
+        // Remove active states
+        tabs.forEach(t => {
+          t.classList.remove('concern-tabs__tab--active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        panels.forEach(p => p.classList.remove('concern-tabs__panel--active'));
+        
+        // Add active state to clicked tab
+        tab.classList.add('concern-tabs__tab--active');
+        tab.setAttribute('aria-selected', 'true');
+        
+        // Show corresponding panel
+        const panelId = tab.getAttribute('aria-controls');
+        const panel = tabsSection.querySelector(`#${panelId}`);
+        panel.classList.add('concern-tabs__panel--active');
+        
+        // Initialize or update Swiper for this panel
+        initSwiperForPanel(panel);
+      });
+    });
+    
+    // Initialize Swiper for a panel
+    function initSwiperForPanel(panel) {
+      const slider = panel.querySelector('.concern-tabs__slider');
+      if (!slider) return;
+      
+      const sliderId = slider.dataset.sliderId;
+      
+      // Destroy existing swiper if present
+      if (swipers[sliderId]) {
+        swipers[sliderId].destroy(true, true);
+      }
+      
+      // Create new Swiper instance
+      swipers[sliderId] = new Swiper(slider, {
+        slidesPerView: 1,
+        spaceBetween: 16,
+        grabCursor: true,
+        watchOverflow: true,
+        navigation: {
+          nextEl: panel.querySelector('.concern-tabs__nav-btn--next'),
+          prevEl: panel.querySelector('.concern-tabs__nav-btn--prev'),
+        },
+        pagination: {
+          el: panel.querySelector('.concern-tabs__pagination'),
+          clickable: true,
+          dynamicBullets: true,
+        },
+        breakpoints: {
+          750: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          990: {
+            slidesPerView: 3,
+            spaceBetween: 24,
+          },
+          1200: {
+            slidesPerView: 4,
+            spaceBetween: 24,
+          }
+        },
+        on: {
+          init: function() {
+            slider.classList.add('swiper-initialized');
+          }
+        }
+      });
+    }
+    
+    // Initialize first tab's swiper on load
+    const firstPanel = tabsSection.querySelector('.concern-tabs__panel--active');
+    if (firstPanel) {
+      setTimeout(() => initSwiperForPanel(firstPanel), 100);
+    }
+    
+    // Handle resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const activePanel = tabsSection.querySelector('.concern-tabs__panel--active');
+        if (activePanel) {
+          initSwiperForPanel(activePanel);
+        }
+      }, 250);
+    });
+    
+    // Add to Cart functionality
+    const atcButtons = tabsSection.querySelectorAll('.concern-product-card__atc-btn[data-variant-id]');
+    
+    atcButtons.forEach(button => {
+      button.addEventListener('click', async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (button.disabled) return;
+        
+        const variantId = button.dataset.variantId;
+        const originalText = button.querySelector('.atc-text');
+        const loader = button.querySelector('.atc-loader');
+        const success = button.querySelector('.atc-success');
+        
+        // Show loading state
+        button.disabled = true;
+        if (originalText) originalText.hidden = true;
+        if (loader) loader.hidden = false;
+        
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id: variantId,
+              quantity: 1
+            })
+          });
+          
+          if (response.ok) {
+            // Show success state
+            if (loader) loader.hidden = true;
+            if (success) success.hidden = false;
+            button.classList.add('concern-product-card__atc-btn--success');
+            
+            // Update cart count if exists
+            const cartCount = document.querySelector('.cart-count-bubble');
+            if (cartCount) {
+              const currentCount = parseInt(cartCount.textContent) || 0;
+              cartCount.textContent = currentCount + 1;
+            }
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+              if (success) success.hidden = true;
+              if (originalText) originalText.hidden = false;
+              button.classList.remove('concern-product-card__atc-btn--success');
+              button.disabled = false;
+            }, 2000);
+          } else {
+            throw new Error('Failed to add to cart');
+          }
+        } catch (error) {
+          console.error('Add to cart error:', error);
+          // Reset to original state
+          if (loader) loader.hidden = true;
+          if (originalText) originalText.hidden = false;
+          button.disabled = false;
+          alert('Failed to add item to cart. Please try again.');
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Concern Tabs",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Select Your Concern",
+      "label": "Heading"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "default": "View all products »",
+      "label": "View all text"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_title",
+          "default": "Tab Name",
+          "label": "Tab title"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Tab icon"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "products_limit",
+          "min": 4,
+          "max": 12,
+          "step": 1,
+          "default": 8,
+          "label": "Products to show"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Concern Tabs",
+      "blocks": [
+        {
+          "type": "tab",
+          "settings": {
+            "tab_title": "Best Solutions"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "tab_title": "Diabetic Wellness"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "tab_title": "Digestive Wellness"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "tab_title": "Pain Reliever"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

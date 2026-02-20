@@ -1359,3 +1359,20 @@ class AccountIcon extends HTMLElement {
 }
 
 customElements.define('account-icon', AccountIcon);
+
+
+document.addEventListener('click', function(e) {
+  if (!e.target.classList.contains('add-related')) return;
+
+  fetch('/cart/add.js', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id: e.target.dataset.id,
+      quantity: 1
+    })
+  })
+  .then(() => {
+    document.dispatchEvent(new Event('cart:refresh'));
+  });
+});

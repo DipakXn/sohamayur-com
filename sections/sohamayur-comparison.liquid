@@ -1,0 +1,572 @@
+{% comment %}
+  Sohamayur Comparison Section
+  File: sohamayur-comparison.liquid
+  Usage: Add to theme sections
+{% endcomment %}
+
+<style>
+  :root {
+    --soha-gold: #F3A82E;
+    --soha-green: #435E49;
+    --soha-yellow: #FFEC00;
+    --soha-brown: #471200;
+    --soha-cream: #FCF4EA;
+    --soha-teal: #23E8DE;
+    --soha-lavender: #D3D2FF;
+    --soha-blue: #8AC7FF;
+    --soha-lime: #41AF00;
+    --soha-orange: #E86300;
+    --soha-peach: #FCE0BB;
+    --soha-lemon: #FFFCBB;
+    --soha-mint: #DDFCC2;
+  }
+
+  .soha-comparison {
+    background: linear-gradient(135deg, var(--soha-cream) 0%, #fff 100%);
+    padding: 80px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .soha-comparison::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(243, 168, 46, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .soha-comparison__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .soha-comparison__header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .soha-comparison__subtitle {
+    color: var(--soha-gold);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .soha-comparison__title {
+    font-size: clamp(32px, 5vw, 48px);
+    color: var(--soha-brown);
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    line-height: 1.2;
+  }
+
+  .soha-comparison__description {
+    color: #666;
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .soha-comparison__table-wrapper {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(67, 94, 73, 0.1);
+    overflow: hidden;
+    border: 1px solid rgba(67, 94, 73, 0.08);
+  }
+
+  .soha-comparison__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .soha-comparison__thead {
+    background: var(--soha-green);
+  }
+
+  .soha-comparison__th {
+    padding: 24px 20px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .soha-comparison__th:first-child {
+    text-align: left;
+    width: 25%;
+    padding-left: 32px;
+  }
+
+  .soha-comparison__th:nth-child(2),
+  .soha-comparison__th:nth-child(3) {
+    text-align: center;
+    width: 37.5%;
+  }
+
+  .soha-comparison__row {
+    border-bottom: 1px solid rgba(67, 94, 73, 0.08);
+    transition: all 0.3s ease;
+  }
+
+  .soha-comparison__row:hover {
+    background: rgba(252, 244, 234, 0.5);
+  }
+
+  .soha-comparison__row:last-child {
+    border-bottom: none;
+  }
+
+  .soha-comparison__td {
+    padding: 18px 10px;
+    vertical-align: middle;
+  }
+
+  .soha-comparison__feature {
+    font-weight: 600;
+    color: var(--soha-brown);
+    font-size: 15px;
+    padding-left: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .soha-comparison__feature-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--soha-peach) 0%, var(--soha-cream) 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .soha-comparison__feature-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--soha-green);
+  }
+
+  .soha-comparison__cell {
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .soha-comparison__cell--sohamayur {
+    background: rgba(35, 232, 222, 0.05);
+    color: var(--soha-green);
+    font-weight: 500;
+  }
+
+  .soha-comparison__cell--generic {
+    color: #888;
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  .soha-comparison__check {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .soha-comparison__icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .soha-comparison__icon--check {
+    background: var(--soha-green);
+    color: white;
+  }
+
+  .soha-comparison__icon--cross {
+    background: rgba(232, 99, 0, 0.15);
+    color: var(--soha-orange);
+  }
+
+  .soha-comparison__icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .soha-comparison__badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--soha-gold) 0%, #e8951a 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Mobile Styles */
+  @media (max-width: 768px) {
+    .soha-comparison {
+      padding: 60px 16px;
+    }
+
+    .soha-comparison__table-wrapper {
+      border-radius: 16px;
+      overflow-x: auto;
+    }
+
+    .soha-comparison__table {
+      min-width: 600px;
+    }
+
+    .soha-comparison__th,
+    .soha-comparison__td {
+      padding: 20px 16px;
+      font-size: 13px;
+    }
+
+    .soha-comparison__feature {
+      padding-left: 16px;
+      font-size: 13px;
+    }
+
+    .soha-comparison__feature-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .soha-comparison__title {
+      font-size: 28px;
+    }
+  }
+
+  /* Animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .soha-comparison__row {
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .soha-comparison__row:nth-child(1) { animation-delay: 0.1s; }
+  .soha-comparison__row:nth-child(2) { animation-delay: 0.15s; }
+  .soha-comparison__row:nth-child(3) { animation-delay: 0.2s; }
+  .soha-comparison__row:nth-child(4) { animation-delay: 0.25s; }
+  .soha-comparison__row:nth-child(5) { animation-delay: 0.3s; }
+  .soha-comparison__row:nth-child(6) { animation-delay: 0.35s; }
+  .soha-comparison__row:nth-child(7) { animation-delay: 0.4s; }
+</style>
+
+<section class="soha-comparison">
+  <div class="soha-comparison__container">
+    <header class="soha-comparison__header">
+      <span class="soha-comparison__subtitle">The Clear Choice</span>
+      <h2 class="soha-comparison__title">Soham Sidhhatatvam vs Generic Brands</h2>
+      <p class="soha-comparison__description">
+       Not all Ayurvedic supplements deliver the same standards of purity and care. See why discerning customers choose Soham Sidhhatatvam.
+      </p>
+    </header>
+
+    <div class="soha-comparison__table-wrapper">
+      <table class="soha-comparison__table">
+        <thead class="soha-comparison__thead">
+          <tr>
+            <th class="soha-comparison__th">Feature</th>
+            <th class="soha-comparison__th">
+              Sohamayur
+              <span class="soha-comparison__badge">Premium</span>
+            </th>
+            <th class="soha-comparison__th">Generic Brands</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="soha-comparison__row">
+            <td class="soha-comparison__td soha-comparison__feature">
+              <span class="soha-comparison__feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+              </span>
+              Ingredients
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--sohamayur">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--check">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                100% pure, ethically sourced Ayurvedic herbs with no artificial fillers.
+              </span>
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--generic">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--cross">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </span>
+                Synthetic additives masked as herbal formulations.
+              </span>
+            </td>
+          </tr>
+
+          <tr class="soha-comparison__row">
+            <td class="soha-comparison__td soha-comparison__feature">
+              <span class="soha-comparison__feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <path d="M12 20h9M12 20V4M12 4H3m9 16h-9m9-8h-9"/>
+                </svg>
+              </span>
+              Formulation
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--sohamayur">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--check">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                Authentic Ayurvedic formulations perfected through centuries of tradition.
+              </span>
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--generic">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--cross">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </span>
+                Mass-produced, one-size-fits-all blends.
+              </span>
+            </td>
+          </tr>
+
+          <tr class="soha-comparison__row">
+            <td class="soha-comparison__td soha-comparison__feature">
+              <span class="soha-comparison__feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
+                </svg>
+              </span>
+              Testing
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--sohamayur">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--check">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                ISO & GMP-certified facilities with strict quality control standards.
+              </span>
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--generic">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--cross">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </span>
+                Unverified manufacturing practices with inconsistent quality checks.
+              </span>
+            </td>
+          </tr>
+
+          <tr class="soha-comparison__row">
+            <td class="soha-comparison__td soha-comparison__feature">
+              <span class="soha-comparison__feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+              </span>
+              Results
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--sohamayur">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--check">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                Noticeable wellness improvements with consistency.
+              </span>
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--generic">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--cross">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </span>
+                Inconsistent and short-term effects.
+              </span>
+            </td>
+          </tr>
+
+          <tr class="soha-comparison__row">
+            <td class="soha-comparison__td soha-comparison__feature">
+              <span class="soha-comparison__feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </span>
+              Sourcing
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--sohamayur">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--check">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                Responsibly sourced herbs from trusted Indian farms.
+              </span>
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--generic">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--cross">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </span>
+                Bulk-imported raw materials with unclear origins.
+              </span>
+            </td>
+          </tr>
+
+          <tr class="soha-comparison__row">
+            <td class="soha-comparison__td soha-comparison__feature">
+              <span class="soha-comparison__feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+              </span>
+              Packaging
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--sohamayur">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--check">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                Sustainable packaging designed for purity protection.
+              </span>
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--generic">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--cross">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </span>
+                Excessive plastic and non-recyclable materials.
+              </span>
+            </td>
+          </tr>
+
+          <tr class="soha-comparison__row">
+            <td class="soha-comparison__td soha-comparison__feature">
+              <span class="soha-comparison__feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+              </span>
+              Transparency
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--sohamayur">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--check">
+                  <svg viewBox="0 0 24 24" fill="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                Clear ingredient disclosure with accurate dosages.
+              </span>
+            </td>
+            <td class="soha-comparison__td soha-comparison__cell soha-comparison__cell--generic">
+              <span class="soha-comparison__check">
+                <span class="soha-comparison__icon soha-comparison__icon--cross">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </span>
+                Proprietary blends with hidden quantities.
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Sohamayur Comparison",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "The Clear Choice"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Sohamayur vs Generic Brands"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Not all Ayurvedic products are created equal. See why thousands choose Sohamayur over generic alternatives."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sohamayur Comparison"
+    }
+  ]
+}
+{% endschema %}

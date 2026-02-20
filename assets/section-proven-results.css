@@ -57,6 +57,18 @@
   .proven-results-grid {
     grid-template-columns: 1.2fr 1fr;
     gap: 6rem;
+    /* Keep columns aligned to the top to avoid the media column being squeezed
+       when the testimonial column grows taller. Also allow grid children to
+       shrink below their content width by setting min-width: 0. */
+    align-items: start;
+  }
+
+  /* Allow the media and content columns to shrink inside the grid without
+     forcing the grid to grow based on long content in the testimonial slider. */
+  .proven-results-media,
+  .proven-results-content,
+  .video-comparison-container {
+    min-width: 0;
   }
 }
 

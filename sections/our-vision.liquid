@@ -1,0 +1,516 @@
+{% comment %}
+  Our Vision Section - Ayurvedic Wellness Brand
+  Usage: Add to templates or sections via theme customizer
+{% endcomment %}
+
+{{ 'our-vision.css' | asset_url | stylesheet_tag }}
+
+<section class="vision-section" id="our-vision-{{ section.id }}">
+  <div class="vision-container">
+    
+    {% if section.settings.show_label %}
+      <div class="vision-label">
+        <svg class="vision-label-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <span>{{ section.settings.label_text | default: "About Us" }}</span>
+      </div>
+    {% endif %}
+
+    {% if section.settings.heading != blank %}
+      <h2 class="vision-heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    {% if section.settings.vision_statement != blank %}
+      <div class="vision-statement">
+        {{ section.settings.vision_statement }}
+      </div>
+    {% endif %}
+
+    <div class="vision-cards-grid">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'vision_card' %}
+            <div class="vision-card" {{ block.shopify_attributes }}>
+              <div class="vision-card-icon-wrapper">
+                {% if block.settings.icon == 'leaf' %}
+                  <svg class="vision-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+                  </svg>
+                {% elsif block.settings.icon == 'shield' %}
+                  <svg class="vision-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11H16V16H8V11H9.2V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.4,8.7 10.4,10V11H13.6V10C13.6,8.7 12.8,8.2 12,8.2Z"/>
+                  </svg>
+                {% elsif block.settings.icon == 'heart' %}
+                  <svg class="vision-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+                  </svg>
+                {% elsif block.settings.icon == 'star' %}
+                  <svg class="vision-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/>
+                  </svg>
+                {% elsif block.settings.icon == 'lotus' %}
+                  <svg class="vision-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12,2C12,2 6,6 6,12C6,15.31 8.69,18 12,18C15.31,18 18,15.31 18,12C18,6 12,2 12,2M12,16C9.79,16 8,14.21 8,12C8,8.5 10.5,6 12,4.5C13.5,6 16,8.5 16,12C16,14.21 14.21,16 12,16M12,22C16,22 20,18 20,14C20,10 17,7 12,2C7,7 4,10 4,14C4,18 8,22 12,22Z"/>
+                  </svg>
+                {% elsif block.settings.icon == 'sun' %}
+                  <svg class="vision-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,2L14.39,5.42C13.65,5.15 12.84,5 12,5C11.16,5 10.35,5.15 9.61,5.42L12,2M3.34,7L7.5,5.29C7.13,6.11 6.89,6.98 6.79,7.88L3.34,7M3.36,17L6.81,16.12C6.91,17.02 7.15,17.89 7.53,18.71L3.36,17M20.65,7L17.2,7.88C17.1,6.98 16.86,6.11 16.5,5.29L20.65,7M20.64,17L16.47,18.71C16.85,17.89 17.09,17.02 17.19,16.12L20.64,17M12,22L9.59,18.56C10.33,18.83 11.14,19 12,19C12.82,19 13.63,18.83 14.37,18.56L12,22Z"/>
+                  </svg>
+                {% endif %}
+              </div>
+              
+              {% if block.settings.title != blank %}
+                <h3 class="vision-card-title">{{ block.settings.title }}</h3>
+              {% endif %}
+              
+              {% if block.settings.description != blank %}
+                <p class="vision-card-description">{{ block.settings.description }}</p>
+              {% endif %}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+
+    {% if section.settings.main_description != blank %}
+      <div class="vision-main-description">
+        {{ section.settings.main_description }}
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<style>
+  #our-vision-{{ section.id }} {
+    --vision-saffron: {{ section.settings.color_saffron | default: '#F3A82E' }};
+    --vision-forest-green: {{ section.settings.color_forest_green | default: '#435E49' }};
+    --vision-deep-brown: {{ section.settings.color_deep_brown | default: '#471200' }};
+    --vision-cream: {{ section.settings.color_cream | default: '#FCF4EA' }};
+    --vision-white: #ffffff;
+    
+    padding: {{ section.settings.padding_top | default: 100 }}px 20px {{ section.settings.padding_bottom | default: 100 }}px;
+    background-color: var(--vision-cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #our-vision-{{ section.id }}::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--vision-saffron) 0%, transparent 70%);
+    opacity: 0.1;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  #our-vision-{{ section.id }}::after {
+    content: '';
+    position: absolute;
+    bottom: -150px;
+    left: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--vision-forest-green) 0%, transparent 70%);
+    opacity: 0.08;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  #our-vision-{{ section.id }} .vision-container {
+    max-width: {{ section.settings.container_width | default: 1200 }}px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  #our-vision-{{ section.id }} .vision-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--vision-forest-green);
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  #our-vision-{{ section.id }} .vision-label-icon {
+    width: 24px;
+    height: 24px;
+    fill: var(--vision-saffron);
+  }
+
+  #our-vision-{{ section.id }} .vision-heading {
+    font-family: {{ section.settings.heading_font | default: 'serif' }};
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--vision-deep-brown);
+    line-height: 1.2;
+    margin: 0px;
+    text-align: center;
+  }
+
+  #our-vision-{{ section.id }} .vision-statement {
+    font-family: {{ section.settings.heading_font | default: 'serif' }};
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 600;
+    color: var(--vision-forest-green);
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+    padding: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #our-vision-{{ section.id }} .vision-statement::before,
+  #our-vision-{{ section.id }} .vision-statement::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 3px solid var(--vision-saffron);
+  }
+
+  #our-vision-{{ section.id }} .vision-statement::before {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  #our-vision-{{ section.id }} .vision-statement::after {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+  }
+
+  #our-vision-{{ section.id }} .vision-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-top: 60px;
+  }
+
+  @media (min-width: 768px) {
+    #our-vision-{{ section.id }} .vision-cards-grid {
+      grid-template-columns: repeat({{ section.settings.columns | default: 3 }}, 1fr);
+    }
+  }
+
+  #our-vision-{{ section.id }} .vision-card {
+    background: var(--vision-white);
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(67, 94, 73, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #our-vision-{{ section.id }} .vision-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--vision-saffron), var(--vision-forest-green));
+  }
+
+  #our-vision-{{ section.id }} .vision-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(67, 94, 73, 0.15);
+  }
+
+  #our-vision-{{ section.id }} .vision-card-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 25px;
+    background: linear-gradient(135deg, var(--vision-cream) 0%, var(--vision-white) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  #our-vision-{{ section.id }} .vision-card-icon-wrapper::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px dashed var(--vision-saffron);
+    animation: vision-rotate 20s linear infinite;
+  }
+
+  @keyframes vision-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  #our-vision-{{ section.id }} .vision-icon {
+    width: 40px;
+    height: 40px;
+    fill: var(--vision-forest-green);
+  }
+
+  #our-vision-{{ section.id }} .vision-card-title {
+    font-family: {{ section.settings.heading_font | default: 'serif' }};
+    font-size: 1.3rem;
+    color: var(--vision-deep-brown);
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  #our-vision-{{ section.id }} .vision-card-description {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  #our-vision-{{ section.id }} .vision-main-description {
+    max-width: 800px;
+    margin: 60px auto 0;
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 1.9;
+    color: #555;
+    position: relative;
+    padding: 30px;
+  }
+
+  #our-vision-{{ section.id }} .vision-main-description::before {
+    content: '"';
+    font-family: {{ section.settings.heading_font | default: 'serif' }};
+    font-size: 6rem;
+    color: var(--vision-saffron);
+    opacity: 0.3;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height: 1;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Our Vision",
+  "tag": "section",
+  "class": "section-our-vision",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_label",
+      "label": "Show label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "label_text",
+      "label": "Label text",
+      "default": "About Us"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Vision"
+    },
+    {
+      "type": "textarea",
+      "id": "vision_statement",
+      "label": "Vision Statement",
+      "default": "Make India Healthy Again."
+    },
+    {
+      "type": "richtext",
+      "id": "main_description",
+      "label": "Main Description",
+      "default": "<p>This guiding purpose drives us to create authentic Ayurvedic supplements rooted in ancient standards and manufactured with certified quality practices. We remain committed to supporting everyday wellness through trusted, responsibly crafted products.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Cards per row",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Container width",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_saffron",
+      "label": "Saffron",
+      "default": "#F3A82E"
+    },
+    {
+      "type": "color",
+      "id": "color_forest_green",
+      "label": "Forest Green",
+      "default": "#435E49"
+    },
+    {
+      "type": "color",
+      "id": "color_deep_brown",
+      "label": "Deep Brown",
+      "default": "#471200"
+    },
+    {
+      "type": "color",
+      "id": "color_cream",
+      "label": "Background Cream",
+      "default": "#FCF4EA"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "serif"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "vision_card",
+      "name": "Vision Card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "leaf",
+              "label": "Leaf (Ayurveda)"
+            },
+            {
+              "value": "shield",
+              "label": "Shield (Quality)"
+            },
+            {
+              "value": "heart",
+              "label": "Heart (Wellness)"
+            },
+            {
+              "value": "star",
+              "label": "Star (Excellence)"
+            },
+            {
+              "value": "lotus",
+              "label": "Lotus (Purity)"
+            },
+            {
+              "value": "sun",
+              "label": "Sun (Energy)"
+            }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card Title",
+          "default": "Authentic Ayurveda"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Card Description",
+          "default": "Rooted in ancient standards and time-tested wisdom passed down through generations"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our Vision",
+      "blocks": [
+        {
+          "type": "vision_card",
+          "settings": {
+            "icon": "leaf",
+            "title": "Authentic Ayurveda",
+            "description": "Rooted in ancient standards and time-tested wisdom passed down through generations"
+          }
+        },
+        {
+          "type": "vision_card",
+          "settings": {
+            "icon": "shield",
+            "title": "Certified Quality",
+            "description": "Manufactured with certified quality practices ensuring safety and efficacy"
+          }
+        },
+        {
+          "type": "vision_card",
+          "settings": {
+            "icon": "heart",
+            "title": "Trusted Wellness",
+            "description": "Supporting everyday wellness through responsibly crafted products you can trust"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

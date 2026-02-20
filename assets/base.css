@@ -3466,3 +3466,71 @@ details-disclosure > details {
     width: 44px !important;
   }
 }
+
+
+/* Cart CSS */
+.cart-drawer-slider {
+  background: #2f5d3a;
+  color: #fff;
+  overflow: hidden;
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.slider-track {
+  display: flex;
+  gap: 40px;
+  animation: slideText 12s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes slideText {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+
+.cart-item-card {
+  display: flex;
+  gap: 12px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  margin-bottom: 14px;
+}
+
+.cart-item-card img {
+  width: 80px;
+  border-radius: 10px;
+}
+
+.cart-item-info h4 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.price-row {
+  display: flex;
+  gap: 8px;
+}
+
+.compare {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.cart-related h3 {
+  margin: 16px 0 10px;
+}
+
+.related-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
